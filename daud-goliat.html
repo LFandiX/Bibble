@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Raksasa di Lembah Ela — Sabda Hidup</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Cinzel:wght@400;600;700&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --dark:     #0c0905;
+      --stone:    #1a1208;
+      --earth:    #2e2415;
+      --ash:      #4a3f2e;
+      --gold:     #c9a84c;
+      --gold-l:   #e8c96d;
+      --gold-dim: #7a6230;
+      --blood:    #6b1a1a;
+      --blood-l:  #8b2020;
+      --cream:    #f0e8d0;
+      --cream-d:  #b5a98a;
+      --text:     #ede0c4;
+      --text-dim: #8a7d65;
+      --sky:      #c9b89a;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--dark);
+      color: var(--text);
+      font-family: 'Lato', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.5;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      padding: 1.2rem 2.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      background: rgba(12,9,5,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(201,168,76,0.08);
+    }
+
+    .nav-back {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.25em;
+      color: var(--gold-dim);
+      text-decoration: none;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: color 0.3s;
+    }
+
+    .nav-back:hover { color: var(--gold); }
+
+    .nav-sep { width: 1px; height: 16px; background: var(--ash); }
+
+    .nav-module {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      text-transform: uppercase;
+    }
+
+    .nav-progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      height: 2px;
+      background: linear-gradient(to right, var(--gold-dim), var(--gold));
+      z-index: 201;
+      transition: width 0.1s;
+      width: 0%;
+    }
+
+    /* ── HERO BANNER ── */
+    .story-hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding-bottom: 8rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-landscape {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 100% 60% at 50% 100%, rgba(139,32,32,0.2) 0%, transparent 50%),
+        radial-gradient(ellipse 80% 40% at 30% 70%, rgba(201,168,76,0.06) 0%, transparent 50%),
+        linear-gradient(180deg,
+          #050403 0%,
+          #0f0c07 20%,
+          #1a1208 50%,
+          #2a1e0d 70%,
+          #1a0f08 85%,
+          #0c0905 100%
+        );
+    }
+
+    /* SVG mountains */
+    .hero-mountains {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 55%;
+    }
+
+    .hero-sky-glow {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 50%;
+      background: linear-gradient(180deg,
+        rgba(201,168,76,0.04) 0%,
+        transparent 100%
+      );
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 0 2rem;
+    }
+
+    .hero-eyebrow {
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.4em;
+      color: var(--gold-dim);
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 1s ease forwards 0.5s;
+    }
+
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.8rem, 8vw, 6rem);
+      font-weight: 300;
+      line-height: 1.05;
+      color: var(--cream);
+      margin-bottom: 1rem;
+      opacity: 0;
+      animation: fadeUp 1.2s ease forwards 0.7s;
+    }
+
+    .hero-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      font-style: italic;
+      color: var(--gold-l);
+      margin-bottom: 3rem;
+      opacity: 0;
+      animation: fadeUp 1s ease forwards 1s;
+    }
+
+    .hero-meta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      opacity: 0;
+      animation: fadeUp 1s ease forwards 1.2s;
+    }
+
+    .hero-meta span {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.25em;
+      color: var(--text-dim);
+    }
+
+    .hero-divider-dot { color: var(--gold-dim); }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0;
+      animation: fadeUp 1s ease forwards 1.5s;
+    }
+
+    .scroll-indicator span {
+      font-family: 'Cinzel', serif;
+      font-size: 0.55rem;
+      letter-spacing: 0.3em;
+      color: var(--gold-dim);
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--gold-dim), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(1.1); }
+    }
+
+    /* ── STORY WRAPPER ── */
+    .story-wrapper {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* ── SECTION TRANSITION ── */
+    .scene-divider {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin: 5rem 0 3rem;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.8s ease;
+    }
+
+    .scene-divider.visible { opacity: 1; transform: translateY(0); }
+
+    .divider-line { flex: 1; height: 1px; background: var(--ash); }
+
+    .scene-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      color: var(--gold-dim);
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    /* ── NARRATIVE TEXT ── */
+    .narrative-block {
+      margin: 2.5rem 0;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.9s ease, transform 0.9s ease;
+    }
+
+    .narrative-block.visible { opacity: 1; transform: translateY(0); }
+
+    .narrative-block p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.15rem, 2.5vw, 1.4rem);
+      font-weight: 300;
+      line-height: 1.9;
+      color: var(--cream-d);
+      margin-bottom: 1.5rem;
+    }
+
+    .narrative-block p:last-child { margin-bottom: 0; }
+
+    .big-text {
+      font-size: clamp(1.6rem, 4vw, 2.2rem) !important;
+      font-weight: 300 !important;
+      color: var(--cream) !important;
+      line-height: 1.5 !important;
+      font-style: italic;
+    }
+
+    .quote-text {
+      border-left: 2px solid var(--gold-dim);
+      padding-left: 1.5rem;
+      font-style: italic !important;
+      color: var(--sky) !important;
+    }
+
+    .emphasis { color: var(--gold-l); font-style: italic; }
+    .strong-word { color: var(--cream); font-weight: 600; }
+    .red-text { color: #d4776a; font-style: italic; }
+
+    /* ── ATMOSPHERE BLOCK ── */
+    .atm-block {
+      margin: 3rem 0;
+      padding: 2rem;
+      background: rgba(46,36,21,0.5);
+      border: 1px solid var(--ash);
+      position: relative;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.8s ease;
+    }
+
+    .atm-block.visible { opacity: 1; transform: translateY(0); }
+    .atm-block::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px;
+      height: 100%;
+      background: linear-gradient(to bottom, var(--blood-l), var(--blood));
+    }
+
+    .atm-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      color: var(--blood-l);
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .atm-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      font-style: italic;
+      color: var(--text-dim);
+      line-height: 1.8;
+    }
+
+    /* ── COUNT DISPLAY ── */
+    .days-count {
+      text-align: center;
+      margin: 4rem 0;
+      opacity: 0;
+      transform: scale(0.9);
+      transition: all 1s ease;
+    }
+
+    .days-count.visible { opacity: 1; transform: scale(1); }
+
+    .days-number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(5rem, 15vw, 10rem);
+      font-weight: 300;
+      color: var(--blood);
+      line-height: 1;
+      opacity: 0.5;
+    }
+
+    .days-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.4em;
+      color: var(--gold-dim);
+      text-transform: uppercase;
+      margin-top: -0.5rem;
+    }
+
+    /* ── CHOICE SECTION ── */
+    .choice-section {
+      margin: 4rem 0;
+      padding: 3rem;
+      background: rgba(12,9,5,0.8);
+      border: 1px solid var(--gold-dim);
+      position: relative;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.9s ease;
+    }
+
+    .choice-section.visible { opacity: 1; transform: translateY(0); }
+
+    .choice-section::before {
+      content: '';
+      position: absolute;
+      inset: 3px;
+      border: 1px solid rgba(201,168,76,0.1);
+      pointer-events: none;
+    }
+
+    .choice-eyebrow {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.4em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .choice-eyebrow::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(201,168,76,0.2);
+    }
+
+    .choice-prompt {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+      font-style: italic;
+      color: var(--cream-d);
+      line-height: 1.8;
+      margin-bottom: 2.5rem;
+    }
+
+    .choices-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 600px) {
+      .choices-grid { grid-template-columns: 1fr; }
+    }
+
+    .choice-btn {
+      background: transparent;
+      border: 1px solid var(--ash);
+      padding: 1.8rem;
+      cursor: pointer;
+      text-align: left;
+      position: relative;
+      transition: all 0.3s;
+      color: var(--text);
+    }
+
+    .choice-btn:hover {
+      border-color: var(--gold-dim);
+      background: rgba(201,168,76,0.04);
+    }
+
+    .choice-btn.selected {
+      border-color: var(--gold);
+      background: rgba(201,168,76,0.08);
+    }
+
+    .choice-btn.other-selected {
+      opacity: 0.4;
+    }
+
+    .choice-letter {
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      color: var(--gold-dim);
+      margin-bottom: 1rem;
+    }
+
+    .choice-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      font-style: italic;
+      color: var(--cream-d);
+      line-height: 1.7;
+    }
+
+    .choice-btn.selected .choice-text { color: var(--cream); }
+
+    .choice-check {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 1px solid var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .choice-btn.selected .choice-check { opacity: 1; }
+
+    .choice-result {
+      margin-top: 2rem;
+      padding: 1.5rem;
+      border-left: 2px solid var(--gold-dim);
+      background: rgba(201,168,76,0.03);
+      display: none;
+    }
+
+    .choice-result.visible { display: block; }
+
+    .choice-result p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      font-style: italic;
+      color: var(--cream-d);
+      line-height: 1.8;
+    }
+
+    /* ── TURNING POINT ── */
+    .turning-point {
+      margin: 5rem 0;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 1s ease;
+    }
+
+    .turning-point.visible { opacity: 1; transform: translateY(0); }
+
+    .turning-icon {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 4rem;
+      color: var(--gold-dim);
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .turning-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--cream);
+      line-height: 1.4;
+    }
+
+    .turning-sub {
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      color: var(--gold-dim);
+      text-transform: uppercase;
+      margin-top: 1rem;
+    }
+
+    /* ── CLIMAX SCENE ── */
+    .climax-bg {
+      position: relative;
+      margin: 4rem -2rem;
+      padding: 5rem 3rem;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 50%, rgba(201,168,76,0.06) 0%, transparent 70%),
+        linear-gradient(180deg, rgba(12,9,5,0) 0%, rgba(26,18,8,0.9) 20%, rgba(26,18,8,0.9) 80%, rgba(12,9,5,0) 100%);
+      text-align: center;
+    }
+
+    .climax-bg .story-wrapper-inner {
+      max-width: 660px;
+      margin: 0 auto;
+    }
+
+    .victory-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.3rem, 3vw, 1.7rem);
+      font-weight: 300;
+      line-height: 1.9;
+      color: var(--cream-d);
+      margin-bottom: 1.5rem;
+    }
+
+    .victory-shout {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.6rem, 4vw, 2.3rem);
+      font-weight: 600;
+      font-style: italic;
+      color: var(--gold-l);
+      line-height: 1.4;
+      margin: 2.5rem 0;
+      text-align: center;
+      quotes: "\201C" "\201D";
+    }
+
+    .victory-shout::before { content: open-quote; }
+    .victory-shout::after  { content: close-quote; }
+
+    .stone-throw {
+      font-family: 'Cinzel', serif;
+      font-size: 3rem;
+      color: var(--gold);
+      display: block;
+      margin: 2rem 0;
+      animation: stoneFly 0.6s ease;
+    }
+
+    @keyframes stoneFly {
+      from { transform: translateX(-30px) rotate(-15deg); opacity: 0; }
+      to   { transform: translateX(0) rotate(0); opacity: 1; }
+    }
+
+    /* ── REFLECTION SECTION ── */
+    .reflection-section {
+      margin: 6rem 0 4rem;
+      padding: 4rem;
+      background: rgba(26,18,8,0.8);
+      border: 1px solid var(--gold-dim);
+      position: relative;
+    }
+
+    .reflection-section::before {
+      content: '';
+      position: absolute;
+      inset: 4px;
+      border: 1px solid rgba(201,168,76,0.08);
+      pointer-events: none;
+    }
+
+    .reflection-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .reflection-eyebrow {
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.4em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    .reflection-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      font-weight: 300;
+      color: var(--cream);
+      line-height: 1.3;
+    }
+
+    .reflection-intro {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      font-style: italic;
+      color: var(--cream-d);
+      line-height: 1.8;
+      margin-top: 1.5rem;
+    }
+
+    .reflection-divider {
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--ash), transparent);
+      margin: 2.5rem 0;
+    }
+
+    .reflection-q {
+      margin-bottom: 2.5rem;
+      padding: 0 0 2.5rem 0;
+      border-bottom: 1px solid rgba(74,63,46,0.5);
+    }
+
+    .reflection-q:last-of-type { border-bottom: none; }
+
+    .q-conditional {
+      display: inline-block;
+      font-family: 'Cinzel', serif;
+      font-size: 0.55rem;
+      letter-spacing: 0.25em;
+      color: var(--gold-dim);
+      border: 1px solid var(--gold-dim);
+      padding: 0.2rem 0.6rem;
+      margin-bottom: 1rem;
+    }
+
+    .q-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: var(--cream);
+      line-height: 1.7;
+      margin-bottom: 1.2rem;
+    }
+
+    .q-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.95rem;
+      font-style: italic;
+      color: var(--text-dim);
+      margin-bottom: 1rem;
+    }
+
+    .journal-textarea {
+      width: 100%;
+      background: rgba(12,9,5,0.6);
+      border: 1px solid var(--ash);
+      color: var(--text);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      line-height: 1.8;
+      padding: 1.2rem;
+      resize: vertical;
+      min-height: 110px;
+      transition: border-color 0.3s;
+      outline: none;
+    }
+
+    .journal-textarea:focus { border-color: var(--gold-dim); }
+    .journal-textarea::placeholder { color: var(--text-dim); font-style: italic; }
+
+    /* ── SAVE BUTTON ── */
+    .save-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      width: 100%;
+      padding: 1.4rem 2rem;
+      margin-top: 2rem;
+      background: transparent;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-family: 'Cinzel', serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.4s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .save-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--gold);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+
+    .save-btn:hover::before { transform: scaleX(1); }
+    .save-btn:hover { color: var(--dark); }
+    .save-btn span { position: relative; z-index: 1; }
+
+    .save-btn.saved {
+      border-color: var(--gold-l);
+      color: var(--dark);
+    }
+
+    .save-btn.saved::before { transform: scaleX(1); }
+
+    /* ── END CARD ── */
+    .end-card {
+      margin: 4rem 0 8rem;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 1s ease;
+    }
+
+    .end-card.visible { opacity: 1; transform: translateY(0); }
+
+    .end-verse {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.3rem, 3vw, 1.8rem);
+      font-style: italic;
+      color: var(--gold-l);
+      line-height: 1.7;
+      margin-bottom: 0.8rem;
+    }
+
+    .end-ref {
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      color: var(--gold-dim);
+    }
+
+    .next-module-hint {
+      margin-top: 4rem;
+      padding-top: 3rem;
+      border-top: 1px solid var(--ash);
+    }
+
+    .next-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .next-link {
+      display: inline-block;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      font-style: italic;
+      color: var(--gold-dim);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .next-link:hover { color: var(--gold); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+    }
+
+    /* ── PARALLAX VERSE ── */
+    .parallax-verse {
+      text-align: center;
+      padding: 5rem 2rem;
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 1s ease;
+    }
+
+    .parallax-verse.visible { opacity: 1; transform: translateY(0); }
+
+    .parallax-verse::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 70% at 50% 50%, rgba(201,168,76,0.05) 0%, transparent 70%);
+    }
+
+    .pv-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.4rem, 4vw, 2.5rem);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--cream);
+      line-height: 1.6;
+      position: relative;
+    }
+
+    .pv-ref {
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      color: var(--gold-dim);
+      margin-top: 1rem;
+      display: block;
+      position: relative;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .reflection-section { padding: 2.5rem 1.8rem; }
+      .choice-section { padding: 2rem 1.5rem; }
+      .story-hero { min-height: 80vh; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="nav-progress-bar" id="progressBar"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-back">
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+      <path d="M8 2L4 6l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+    Kembali
+  </a>
+  <div class="nav-sep"></div>
+  <span class="nav-module">Modul 01 — Raksasa di Lembah Ela</span>
+</nav>
+
+<!-- HERO -->
+<section class="story-hero">
+  <div class="hero-landscape"></div>
+  <div class="hero-sky-glow"></div>
+
+  <!-- SVG Mountains -->
+  <svg class="hero-mountains" viewBox="0 0 1440 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <defs>
+      <linearGradient id="mtnGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#3d2f1a" stop-opacity="0.8"/>
+        <stop offset="100%" stop-color="#0c0905" stop-opacity="1"/>
+      </linearGradient>
+      <linearGradient id="mtnGrad2" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#2a1e0d" stop-opacity="0.9"/>
+        <stop offset="100%" stop-color="#0c0905" stop-opacity="1"/>
+      </linearGradient>
+    </defs>
+    <!-- Far mountains -->
+    <path d="M0 400 L0 280 L120 200 L280 260 L400 180 L550 240 L700 160 L850 210 L1000 150 L1150 200 L1300 170 L1440 220 L1440 400 Z" fill="url(#mtnGrad2)" opacity="0.5"/>
+    <!-- Mid mountains -->
+    <path d="M0 400 L0 320 L80 270 L200 310 L350 250 L500 290 L650 230 L780 275 L920 240 L1060 280 L1200 250 L1350 270 L1440 300 L1440 400 Z" fill="url(#mtnGrad)" opacity="0.7"/>
+    <!-- Ground -->
+    <path d="M0 400 L0 370 L200 360 L400 365 L600 358 L800 362 L1000 355 L1200 360 L1440 368 L1440 400 Z" fill="#0c0905"/>
+    <!-- Tents Israel -->
+    <g opacity="0.25" fill="#c9a84c">
+      <polygon points="300,360 320,340 340,360"/>
+      <polygon points="315,360 335,338 355,360"/>
+      <polygon points="330,360 350,336 370,360"/>
+      <rect x="302" y="355" width="66" height="5" fill="#0c0905" opacity="0.5"/>
+    </g>
+    <!-- Tents Philistine -->
+    <g opacity="0.2" fill="#8b2020">
+      <polygon points="1080,358 1100,336 1120,358"/>
+      <polygon points="1095,358 1118,333 1140,358"/>
+      <polygon points="1110,358 1134,330 1158,358"/>
+      <rect x="1082" y="353" width="76" height="5" fill="#0c0905" opacity="0.5"/>
+    </g>
+    <!-- Valley center -->
+    <line x1="720" y1="358" x2="720" y2="400" stroke="#c9a84c" stroke-width="0.5" opacity="0.2"/>
+  </svg>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow">1 Samuel 17 · Modul 01</p>
+    <h1 class="hero-title">Raksasa di<br>Lembah Ela</h1>
+    <p class="hero-subtitle">Menghadapi Ketakutan Terbesar</p>
+    <div class="hero-meta">
+      <span>Perjanjian Lama</span>
+      <span class="hero-divider-dot">·</span>
+      <span>15 Menit</span>
+      <span class="hero-divider-dot">·</span>
+      <span>2 Pilihan Interaktif</span>
+    </div>
+  </div>
+
+  <div class="scroll-indicator">
+    <span>Mulai Membaca</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ═══════════ STORY CONTENT ═══════════ -->
+
+<div class="story-wrapper">
+
+  <!-- BAGIAN 1 -->
+  <div class="scene-divider">
+    <div class="divider-line"></div>
+    <span class="scene-label">Bagian I — Suasana Teror</span>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="days-count">
+    <div class="days-number">40</div>
+    <div class="days-label">Hari Lamanya</div>
+  </div>
+
+  <div class="narrative-block">
+    <p class="big-text">
+      Sudah empat puluh hari lamanya Lembah Ela menjadi saksi bisu dari sebuah horor yang berulang.
+    </p>
+  </div>
+
+  <div class="narrative-block">
+    <p>
+      Setiap pagi dan setiap sore, sesosok figur muncul dari perkemahan Filistin.
+      Dia bukan sekadar prajurit. Dia adalah <span class="emphasis">monster</span>.
+    </p>
+    <p>
+      Namanya <span class="strong-word">Goliat</span>. Tingginya hampir tiga meter. Badannya dibalut baju zirah tembaga yang berkilau menyilaukan di bawah matahari, dan tombaknya sebesar tuas penenun.
+    </p>
+  </div>
+
+  <div class="atm-block">
+    <div class="atm-label">⚔ Suasana</div>
+    <p class="atm-text">
+      Setiap kali dia melangkah, tanah seakan bergetar. Dan setiap kali dia membuka mulut, nyali seluruh tentara Israel—termasuk Raja Saul yang gagah—langsung ciut.
+    </p>
+  </div>
+
+  <div class="narrative-block">
+    <p class="quote-text">
+      "Pilihlah bagimu seorang, dan biarlah ia turun mendapatkan aku!"
+    </p>
+  </div>
+
+  <div class="narrative-block">
+    <p>
+      Keheningan yang mematikan melanda perkemahan Israel. Tidak ada yang berani bergerak. Tidak ada yang berani menatap matanya. <span class="red-text">Ketakutan telah melumpuhkan sebuah bangsa yang seharusnya diberkati Tuhan.</span>
+    </p>
+  </div>
+
+  <!-- BAGIAN 2 — PILIHAN 1 -->
+  <div class="scene-divider">
+    <div class="divider-line"></div>
+    <span class="scene-label">Bagian II — Sebuah Keputusan</span>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="choice-section" id="choice1">
+    <div class="choice-eyebrow">Titik Keputusan · Interaksi 1</div>
+    <p class="choice-prompt">
+      Pikirkan diri Anda berada di sana. Anda adalah salah satu prajurit Israel. Anda tahu Tuhan menyertai bangsa Anda, tetapi di depan mata Anda ada kematian yang nyata berbentuk seorang raksasa. Hati Anda berteriak untuk lari, tetapi tugas menuntut Anda untuk bertahan.
+    </p>
+    <div class="choices-grid">
+      <button class="choice-btn" id="c1a" onclick="makeChoice(1,'A')">
+        <div class="choice-letter">Pilihan A</div>
+        <p class="choice-text">
+          "Aku tidak bisa. Ini bunuh diri. Lebih baik aku bersembunyi di balik tenda dan berharap ada orang lain yang maju."
+        </p>
+        <div class="choice-check">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+            <path d="M2 5l2.5 2.5L8 3" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </button>
+      <button class="choice-btn" id="c1b" onclick="makeChoice(1,'B')">
+        <div class="choice-letter">Pilihan B</div>
+        <p class="choice-text">
+          "Aku akan tetap di garis depan, meski kakiku lemas dan pedangku bergetar. Aku tidak bisa meninggalkan posku."
+        </p>
+        <div class="choice-check">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+            <path d="M2 5l2.5 2.5L8 3" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </button>
+    </div>
+    <div class="choice-result" id="result1a">
+      <p>
+        <span class="emphasis">Kamu memilih bersembunyi.</span> Dan sungguh, itu adalah respons yang paling manusiawi. Jutaan orang melakukan hal yang sama setiap hari—bukan karena pengecut, tetapi karena raksasa di depan mereka terasa terlalu nyata, terlalu besar, terlalu mematikan.
+      </p>
+    </div>
+    <div class="choice-result" id="result1b">
+      <p>
+        <span class="emphasis">Kamu memilih bertahan.</span> Kakimu gemetar, tetapi kamu tidak beranjak. Ada sesuatu yang lebih besar dari ketakutanmu—mungkin tanggung jawab, mungkin kehormatan, atau mungkin sebuah iman kecil yang masih tersisa.
+      </p>
+    </div>
+  </div>
+
+  <!-- BAGIAN 3 — KEDATANGAN DAUD -->
+  <div class="scene-divider">
+    <div class="divider-line"></div>
+    <span class="scene-label">Bagian III — Seorang Anak Gembala Tiba</span>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="narrative-block">
+    <p>
+      Di tengah ketakutan yang melumpuhkan itu, seorang anak muda tiba. Dia bukan prajurit. Dia hanyalah seorang gembala kecil yang mengantarkan makanan untuk kakak-kakaknya.
+    </p>
+    <p>
+      Namanya <span class="strong-word">Daud</span>.
+    </p>
+  </div>
+
+  <div class="narrative-block">
+    <p>
+      Saat Daud tiba, dia mendengar tawa ejekan Goliat. Namun, reaksi Daud berbeda. Dia tidak merasa takut.
+    </p>
+    <p class="big-text">
+      Dia merasa... <span class="emphasis">geram.</span>
+    </p>
+  </div>
+
+  <div class="narrative-block">
+    <p class="quote-text">
+      "Siapakah orang Filistin yang tak bersunat ini, sampai ia berani mencemooh barisan dari pada Allah yang hidup?"
+    </p>
+  </div>
+
+  <div class="turning-point">
+    <span class="turning-icon">⟁</span>
+    <p class="turning-text">
+      Sementara semua orang melihat<br>
+      <em>"raksasa yang terlalu besar untuk dilawan,"</em>
+    </p>
+    <p class="turning-text" style="margin-top:1rem; color: var(--gold-l);">
+      Daud melihat<br>
+      <em>"raksasa yang terlalu besar untuk luput dari bidikan Tuhan."</em>
+    </p>
+    <p class="turning-sub" style="margin-top:1.5rem;">Iman mengubah perspektif</p>
+  </div>
+
+  <!-- BAGIAN 4 — PILIHAN 2 -->
+  <div class="scene-divider">
+    <div class="divider-line"></div>
+    <span class="scene-label">Bagian IV — Zirah Sang Raja</span>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="narrative-block">
+    <p>
+      Daud mengajukan diri untuk melawan Goliat. Raja Saul, meski putus asa, mencoba memberinya kesempatan. Dia memakaikan baju zirahnya sendiri kepada Daud—baju besi yang berat, ketopong tembaga, dan pedang yang tajam.
+    </p>
+    <p>
+      Daud mencoba melangkah, tetapi dia kaku. Baju zirah itu tidak pas. Itu bukan dirinya. Dia merasa <span class="red-text">terbebani, bukan terlindungi.</span>
+    </p>
+  </div>
+
+  <div class="choice-section" id="choice2">
+    <div class="choice-eyebrow">Titik Keputusan · Interaksi 2 — Sebagai Daud</div>
+    <p class="choice-prompt">
+      Di sana kamu berdiri dengan zirah Raja yang tidak pas di badanmu. Semua orang menonton. Waktu terus berjalan. Goliat menunggu di lembah. Apa yang akan kamu lakukan?
+    </p>
+    <div class="choices-grid">
+      <button class="choice-btn" id="c2a" onclick="makeChoice(2,'A')">
+        <div class="choice-letter">Pilihan A</div>
+        <p class="choice-text">
+          "Ini zirah Raja. Ini pasti yang terbaik dan paling aman. Aku harus belajar menggunakannya demi menang."
+        </p>
+        <div class="choice-check">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+            <path d="M2 5l2.5 2.5L8 3" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </button>
+      <button class="choice-btn" id="c2b" onclick="makeChoice(2,'B')">
+        <div class="choice-letter">Pilihan B</div>
+        <p class="choice-text">
+          "Ini bukan aku. Aku tidak biasa dengannya. Aku akan maju dengan apa yang kumiliki: tongkat, umban, dan imanku."
+        </p>
+        <div class="choice-check">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+            <path d="M2 5l2.5 2.5L8 3" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </button>
+    </div>
+    <div class="choice-result" id="result2a">
+      <p>
+        <span class="emphasis">Kamu memilih zirah Raja.</span> Sesuatu dalam diri kita selalu tergoda oleh cara yang tampak lebih besar, lebih aman, lebih terpercaya dari dunia. Tapi apakah cara itu adalah <em>caramu?</em> Apakah itu lahir dari imanmu atau dari ketakutanmu?
+      </p>
+    </div>
+    <div class="choice-result" id="result2b">
+      <p>
+        <span class="emphasis">Kamu memilih dirimu sendiri.</span> Keberanian terbesar bukan memakai zirah Raja, melainkan datang dengan apa yang sesungguhnya kamu miliki—dan mempercayakan sisanya kepada Tuhan.
+      </p>
+    </div>
+  </div>
+
+  <!-- BAGIAN 5 — KEMENANGAN -->
+  <div class="scene-divider">
+    <div class="divider-line"></div>
+    <span class="scene-label">Bagian V — Lembah Ela Menjadi Saksi</span>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="narrative-block">
+    <p>
+      Daud menolak zirah itu. Dia memilih identitasnya sebagai gembala yang percaya pada Tuhannya. Dia mengambil <span class="strong-word">lima batu licin</span> dari sungai, menaruhnya dalam kantung, dan dengan hanya berbekal umban, dia <span class="emphasis">berlari</span> mendekati Goliat.
+    </p>
+  </div>
+
+  <div class="narrative-block">
+    <p>
+      Goliat menghina Daud dengan lantang:
+    </p>
+    <p class="quote-text red-text">
+      "Anjingkah aku, maka engkau mendatangi aku dengan tongkat?"
+    </p>
+  </div>
+
+</div><!-- end story-wrapper -->
+
+<!-- CLIMAX FULL WIDTH -->
+<div class="climax-bg">
+  <div class="story-wrapper-inner">
+    <div class="narrative-block visible">
+      <p class="victory-text" style="text-align:center">
+        Daud menjawab dengan lantang, suaranya bergema di seluruh lembah:
+      </p>
+    </div>
+    <blockquote class="victory-shout">
+      Engkau mendatangi aku dengan pedang dan tombak dan lembing, tetapi aku mendatangi engkau dengan nama TUHAN semesta alam, Allah barisan Israel yang kaucemooh itu.
+    </blockquote>
+    <p class="victory-text" style="text-align:center; margin-top:2rem">
+      Daud memasukkan batu ke umbannya. Mengayunkannya. Dan melepaskannya.
+    </p>
+    <span class="stone-throw">◉ ─────────────────────→ ✦</span>
+    <p class="victory-text" style="text-align:center; font-size: clamp(1.4rem,3vw,1.9rem)">
+      Batu itu menghantam tepat di dahi Goliat yang tidak terlindungi. Sang raksasa terhuyung, dan <strong style="color:var(--gold-l)">runtuh.</strong>
+    </p>
+    <div class="parallax-verse visible" style="margin-top:3rem">
+      <p class="pv-text">
+        "Kemenangan bukan pada kekuatan zirah,<br>melainkan pada besarnya iman."
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="story-wrapper">
+
+  <div class="parallax-verse" id="keyVerse">
+    <p class="pv-text">
+      "Engkau mendatangi aku dengan pedang dan tombak...<br>
+      tetapi aku mendatangi engkau dengan nama <span style="color:var(--gold-l)">TUHAN</span>."
+    </p>
+    <span class="pv-ref">1 Samuel 17:45</span>
+  </div>
+
+  <!-- REFLEKSI -->
+  <div class="scene-divider">
+    <div class="divider-line"></div>
+    <span class="scene-label">Bagian VI — Altar Pribadi</span>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="reflection-section" id="reflectionSection">
+    <div class="reflection-header">
+      <p class="reflection-eyebrow">Refleksi Personal</p>
+      <h2 class="reflection-title">Raksasamu di Lembahmu</h2>
+      <p class="reflection-intro">
+        Cerita Daud bukan hanya tentang batu dan umban. Ini tentang bagaimana iman mengubah perspektif kita terhadap ketakutan.
+      </p>
+    </div>
+
+    <div class="reflection-divider"></div>
+
+    <!-- Q1 — kondisional sesuai pilihan 1 -->
+    <div class="reflection-q" id="reflQ1">
+      <span class="q-conditional" id="q1badge">Berdasarkan Pilihan Pertamamu</span>
+      <p class="q-text" id="q1text">
+        Pikirkan sejenak tentang pilihanmu tadi. Adakah "raksasa" dalam hidupmu saat ini?
+      </p>
+      <p class="q-sub" id="q1sub">Jawablah dengan jujur, di sini tidak ada yang menghakimi.</p>
+      <textarea class="journal-textarea" id="journal1" placeholder="Tuliskan jawabanmu di sini..."></textarea>
+    </div>
+
+    <!-- Q2 — kondisional sesuai pilihan 2 -->
+    <div class="reflection-q" id="reflQ2">
+      <span class="q-conditional" id="q2badge">Berdasarkan Pilihan Keduamu</span>
+      <p class="q-text" id="q2text">
+        Apakah kamu sering merasa harus mengandalkan cara orang lain untuk mengatasi masalah?
+      </p>
+      <p class="q-sub">Ceritakan situasi konkretnya jika bisa.</p>
+      <textarea class="journal-textarea" id="journal2" placeholder="Tuliskan jawabanmu di sini..."></textarea>
+    </div>
+
+    <!-- Q3 — utama -->
+    <div class="reflection-q">
+      <span class="q-conditional" style="border-color:var(--gold)">Pertanyaan Utama</span>
+      <p class="q-text">
+        Daud tidak takut karena dia tahu seberapa besar Tuhan yang menyertainya. "Goliat" apa dalam hidupmu yang terasa sangat besar, dan bagaimana cerita ini mengubah caramu melihatnya?
+      </p>
+      <p class="q-sub">Ini adalah inti dari seluruh perjalunan hari ini.</p>
+      <textarea class="journal-textarea" id="journal3" placeholder="Tuliskan jawabanmu di sini..."></textarea>
+    </div>
+
+    <button class="save-btn" id="saveBtn" onclick="saveJournal()">
+      <span>✦ Simpan Jurnal &amp; Selesaikan Modul</span>
+    </button>
+  </div>
+
+  <!-- END -->
+  <div class="end-card" id="endCard">
+    <p class="end-verse">
+      "Sebab bukan karena pedang atau tombak<br>
+      TUHAN memberikan kemenangan—<br>
+      peperangan itu milik TUHAN."
+    </p>
+    <span class="end-ref">1 Samuel 17:47</span>
+
+    <div class="next-module-hint">
+      <p class="next-label">Modul Berikutnya</p>
+      <a href="index.html" class="next-link">⟶ Kembali ke Semua Modul</a>
+    </div>
+  </div>
+
+</div><!-- end story-wrapper -->
+
+<script>
+  // ── State
+  const choices = { 1: null, 2: null };
+
+  // ── Progress bar
+  window.addEventListener('scroll', () => {
+    const doc = document.documentElement;
+    const scrolled = (doc.scrollTop || document.body.scrollTop);
+    const total = doc.scrollHeight - doc.clientHeight;
+    document.getElementById('progressBar').style.width = (scrolled / total * 100) + '%';
+  });
+
+  // ── Intersection Observer
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll(
+    '.narrative-block, .scene-divider, .atm-block, .days-count, .choice-section, .turning-point, .parallax-verse, .end-card, .atm-block'
+  ).forEach(el => io.observe(el));
+
+  // ── Choice logic
+  function makeChoice(round, letter) {
+    choices[round] = letter;
+
+    const btnA = document.getElementById(`c${round}a`);
+    const btnB = document.getElementById(`c${round}b`);
+    const resA = document.getElementById(`result${round}a`);
+    const resB = document.getElementById(`result${round}b`);
+
+    btnA.classList.remove('selected', 'other-selected');
+    btnB.classList.remove('selected', 'other-selected');
+    resA.classList.remove('visible');
+    resB.classList.remove('visible');
+
+    if (letter === 'A') {
+      btnA.classList.add('selected');
+      btnB.classList.add('other-selected');
+      resA.classList.add('visible');
+    } else {
+      btnB.classList.add('selected');
+      btnA.classList.add('other-selected');
+      resB.classList.add('visible');
+    }
+
+    // Update reflection questions
+    updateReflections();
+
+    // Scroll to next section after short delay
+    setTimeout(() => {
+      const nextSection = round === 1
+        ? document.querySelector('#choice1 + .scene-divider, .scene-divider:nth-of-type(3)')
+        : document.getElementById('reflectionSection');
+      if (nextSection) {
+        nextSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 900);
+  }
+
+  function updateReflections() {
+    const c1 = choices[1];
+    const c2 = choices[2];
+
+    // Q1
+    if (c1 === 'A') {
+      document.getElementById('q1badge').textContent = 'Kamu Memilih: Bersembunyi';
+      document.getElementById('q1text').textContent =
+        'Kamu memilih untuk sembunyi. Itu manusiawi. Adakah "raksasa" (masalah besar) di hidupmu saat ini yang membuatmu ingin lari dan sembunyi dari Tuhan? Sebutkan apa itu.';
+      document.getElementById('q1sub').textContent =
+        'Tidak ada penilaian di sini. Hanya kejujuran.';
+    } else if (c1 === 'B') {
+      document.getElementById('q1badge').textContent = 'Kamu Memilih: Bertahan Walau Gemetar';
+      document.getElementById('q1text').textContent =
+        'Kamu memilih untuk bertahan meski gemetar. Dari mana datangnya kekuatan untuk bertahan itu? Apakah kamu pernah merasakannya dalam hidup nyatamu—bertahan bukan karena kuat, melainkan karena ada yang menopang?';
+      document.getElementById('q1sub').textContent =
+        'Bagikan momen itu jika ada.';
+    }
+
+    // Q2
+    if (c2 === 'A') {
+      document.getElementById('q2badge').textContent = 'Kamu Memilih: Zirah Raja';
+      document.getElementById('q2text').textContent =
+        'Kamu mencoba menggunakan cara orang lain. Apakah kamu sering merasa harus menjadi orang lain atau menggunakan cara dunia (kekuasaan, uang, pencitraan) untuk mengatasi masalah, daripada mengandalkan Tuhan dengan apa yang kamu miliki sekarang?';
+    } else if (c2 === 'B') {
+      document.getElementById('q2badge').textContent = 'Kamu Memilih: Dirimu Sendiri';
+      document.getElementById('q2text').textContent =
+        'Kamu memilih menjadi dirimu sendiri. Apakah ada "cara Daud" dalam hidupmu—sesuatu yang sederhana, tidak terkesan hebat di mata orang, tetapi kamu percaya itulah yang Tuhan titipkan padamu untuk menghadapi masalahmu?';
+    }
+  }
+
+  // ── Save Journal
+  function saveJournal() {
+    const j1 = document.getElementById('journal1').value.trim();
+    const j2 = document.getElementById('journal2').value.trim();
+    const j3 = document.getElementById('journal3').value.trim();
+
+    if (!j3) {
+      document.getElementById('journal3').focus();
+      document.getElementById('journal3').style.borderColor = '#d4776a';
+      setTimeout(() => {
+        document.getElementById('journal3').style.borderColor = '';
+      }, 2000);
+      return;
+    }
+
+    // Save to localStorage
+    const entry = {
+      module: 'daud-goliat',
+      date: new Date().toISOString(),
+      choice1: choices[1],
+      choice2: choices[2],
+      q1: j1,
+      q2: j2,
+      q3: j3
+    };
+    localStorage.setItem('journal_daud_goliat', JSON.stringify(entry));
+
+    // UI feedback
+    const btn = document.getElementById('saveBtn');
+    btn.classList.add('saved');
+    btn.querySelector('span').textContent = '✓ Jurnal Tersimpan';
+
+    // Show end card
+    setTimeout(() => {
+      const endCard = document.getElementById('endCard');
+      endCard.classList.add('visible');
+      endCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 600);
+  }
+
+  // ── Load saved journal on return
+  window.addEventListener('load', () => {
+    const saved = localStorage.getItem('journal_daud_goliat');
+    if (saved) {
+      try {
+        const entry = JSON.parse(saved);
+        if (entry.q1) document.getElementById('journal1').value = entry.q1;
+        if (entry.q2) document.getElementById('journal2').value = entry.q2;
+        if (entry.q3) document.getElementById('journal3').value = entry.q3;
+        if (entry.choice1) makeChoice(1, entry.choice1);
+        if (entry.choice2) makeChoice(2, entry.choice2);
+      } catch(e) {}
+    }
+  });
+</script>
+</body>
+</html>
