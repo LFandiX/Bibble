@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Api di Tengah Malam — Sabda Hidup</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Cinzel:wght@400;600&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    /* ══════════════════════════════════════════
+       MOBILE-FIRST — base styles target ~390px
+    ══════════════════════════════════════════ */
+    :root {
+      --dark:#070a0f;--stone:#0f1520;--earth:#1a2235;--ash:#2e3d52;
+      --gold:#c9a84c;--gold-l:#e8c96d;--gold-dim:#7a6230;
+      /* Blue-night palette for this story */
+      --blue:#1a3a5c;--blue-l:#2a5a8c;--blue-dim:#0d2035;
+      --ember:#c4622a;--ember-l:#e07840;
+      --cream:#f0e8d0;--cream-d:#b5a98a;
+      --text:#dde4ef;--text-dim:#6e7e96;--sky:#a8c0d8;
+      --fs-label:.7rem;--fs-body:1.05rem;--fs-body-l:1.2rem;
+      --fs-big:1.6rem;--fs-h1:2.6rem;
+    }
+
+    *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html{scroll-behavior:smooth;font-size:16px}
+    body{background:var(--dark);color:var(--text);font-family:'Lato',sans-serif;font-weight:300;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+    body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:.5}
+
+    /* ── NAV ── */
+    nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:.9rem 1.2rem;display:flex;align-items:center;gap:1rem;background:rgba(7,10,15,.92);backdrop-filter:blur(14px);border-bottom:1px solid rgba(168,192,216,.08)}
+    .nav-back{font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.15em;color:var(--text-dim);text-decoration:none;text-transform:uppercase;display:flex;align-items:center;gap:.5rem;transition:color .3s;flex-shrink:0;padding:.5rem 0}
+    .nav-back:hover{color:var(--sky)}
+    .nav-sep{width:1px;height:14px;background:var(--ash);flex-shrink:0}
+    .nav-module{font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.12em;color:var(--sky);text-transform:uppercase;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .nav-progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(to right,var(--blue-l),var(--sky));z-index:201;transition:width .1s;width:0%}
+
+    /* ── HERO ── */
+    .story-hero{min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:5rem;position:relative;overflow:hidden}
+    .hero-sky{position:absolute;inset:0;background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(26,58,92,.4) 0%,transparent 60%),linear-gradient(180deg,#010308 0%,#07101e 30%,#0d1a2e 60%,#070a0f 100%)}
+
+    /* Stars */
+    .hero-stars{position:absolute;inset:0;overflow:hidden}
+    .star{position:absolute;border-radius:50%;background:#fff;animation:twinkle var(--dur,3s) ease-in-out infinite var(--del,0s)}
+    @keyframes twinkle{0%,100%{opacity:var(--op,.4)}50%{opacity:1}}
+
+    .hero-desert{position:absolute;bottom:0;left:0;right:0;height:40%}
+    .hero-tree{position:absolute;bottom:0;left:50%;transform:translateX(-50%);z-index:2}
+
+    .hero-content{position:relative;z-index:3;text-align:center;padding:0 1.5rem}
+    .hero-eyebrow{font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.2em;color:var(--text-dim);text-transform:uppercase;margin-bottom:1rem;opacity:0;animation:fadeUp 1s ease forwards .5s}
+    .hero-title{font-family:'Cormorant Garamond',serif;font-size:var(--fs-h1);font-weight:300;line-height:1.08;color:var(--cream);margin-bottom:.8rem;opacity:0;animation:fadeUp 1.2s ease forwards .7s}
+    .hero-title em{font-style:italic;color:var(--sky)}
+    .hero-subtitle{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-style:italic;color:var(--sky);opacity:.8;margin-bottom:2rem;opacity:0;animation:fadeUp 1s ease forwards 1s}
+    .hero-meta{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:.6rem 1rem;opacity:0;animation:fadeUp 1s ease forwards 1.2s}
+    .hero-meta span{font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.15em;color:var(--text-dim)}
+
+    .scroll-indicator{position:absolute;bottom:1.8rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.4rem;opacity:0;animation:fadeUp 1s ease forwards 1.5s}
+    .scroll-indicator span{font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.2em;color:var(--text-dim)}
+    .scroll-line{width:1px;height:32px;background:linear-gradient(to bottom,var(--text-dim),transparent);animation:scrollP 2s ease-in-out infinite}
+    @keyframes scrollP{0%,100%{opacity:.3}50%{opacity:1}}
+
+    /* ── LAYOUT ── */
+    .story-wrapper{max-width:720px;margin:0 auto;padding:0 1.2rem}
+
+    /* ── SCENE DIVIDER ── */
+    .scene-divider{display:flex;align-items:center;gap:1rem;margin:3.5rem 0 2rem;opacity:0;transform:translateY(20px);transition:all .8s ease}
+    .scene-divider.visible{opacity:1;transform:translateY(0)}
+    .divider-line{flex:1;height:1px;background:var(--ash);min-width:16px}
+    .scene-label{font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.15em;color:var(--text-dim);text-transform:uppercase;text-align:center;line-height:1.5}
+
+    /* ── NARRATIVE ── */
+    .narrative-block{margin:2rem 0;opacity:0;transform:translateY(24px);transition:opacity .9s ease,transform .9s ease}
+    .narrative-block.visible{opacity:1;transform:translateY(0)}
+    .narrative-block p{font-family:'Cormorant Garamond',serif;font-size:var(--fs-body-l);font-weight:300;line-height:1.9;color:var(--cream-d);margin-bottom:1.3rem}
+    .narrative-block p:last-child{margin-bottom:0}
+    .big-text{font-size:var(--fs-big)!important;color:var(--cream)!important;line-height:1.45!important;font-style:italic}
+    .quote-text{border-left:2px solid var(--blue-l);padding-left:1.2rem;font-style:italic!important;color:var(--sky)!important}
+    .emphasis{color:var(--sky);font-style:italic}
+    .strong-word{color:var(--cream);font-weight:600}
+    .ember-text{color:var(--ember-l);font-style:italic}
+    .quiet-text{color:var(--text-dim);font-style:italic}
+
+    /* ── ATMOSPHERE ── */
+    .atm-block{margin:2.5rem 0;padding:1.5rem 1.5rem 1.5rem 1.8rem;background:rgba(13,32,53,.5);border:1px solid var(--ash);position:relative;opacity:0;transform:translateY(20px);transition:all .8s ease}
+    .atm-block.visible{opacity:1;transform:translateY(0)}
+    .atm-block::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:linear-gradient(to bottom,var(--blue-l),var(--blue))}
+    .atm-block.ember::before{background:linear-gradient(to bottom,var(--ember-l),var(--ember))}
+    .atm-label{font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.15em;color:var(--blue-l);text-transform:uppercase;margin-bottom:.9rem}
+    .atm-block.ember .atm-label{color:var(--ember-l)}
+    .atm-text{font-family:'Cormorant Garamond',serif;font-size:var(--fs-body);font-style:italic;color:var(--text-dim);line-height:1.85}
+
+    /* ── VICTORY COUNTER (mirror of days-count) ── */
+    .victory-count{text-align:center;margin:3rem 0;opacity:0;transform:scale(.9);transition:all 1s ease}
+    .victory-count.visible{opacity:1;transform:scale(1)}
+    .victory-number{font-family:'Cormorant Garamond',serif;font-size:clamp(4rem,20vw,9rem);font-weight:300;color:var(--ember);line-height:1;opacity:.4}
+    .victory-label{font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.25em;color:var(--text-dim);text-transform:uppercase;margin-top:-.3rem}
+
+    /* ── TURNING POINT ── */
+    .turning-point{margin:4rem 0;text-align:center;opacity:0;transform:translateY(30px);transition:all 1s ease}
+    .turning-point.visible{opacity:1;transform:translateY(0)}
+    .turning-icon{font-size:2rem;color:var(--text-dim);display:block;margin-bottom:1rem}
+    .turning-text{font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:300;font-style:italic;color:var(--cream);line-height:1.55}
+
+    /* ── CHOICE SECTION ── */
+    .choice-section{margin:3rem 0;opacity:0;transform:translateY(30px);transition:all .9s ease}
+    .choice-section.visible{opacity:1;transform:translateY(0)}
+    .choice-intro-label{font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.18em;color:var(--sky);text-transform:uppercase;display:flex;align-items:center;gap:.8rem;margin-bottom:1.5rem}
+    .choice-intro-label::after{content:'';flex:1;height:1px;background:rgba(168,192,216,.2)}
+    .choice-framing{font-family:'Cormorant Garamond',serif;font-size:var(--fs-body-l);font-weight:300;font-style:italic;color:var(--cream-d);line-height:1.85;margin-bottom:.8rem}
+    .choice-subframing{font-family:'Cormorant Garamond',serif;font-size:var(--fs-body);color:var(--text-dim);line-height:1.75;margin-bottom:2rem;font-style:italic}
+
+    .choices-grid{display:grid;grid-template-columns:1fr;gap:2px;background:var(--ash)}
+    .choice-btn{background:var(--dark);padding:1.5rem 1.4rem;cursor:pointer;text-align:left;border:none;color:var(--text);transition:background .3s;position:relative;width:100%;min-height:56px}
+    .choice-btn:active{background:var(--stone)}
+    .choice-btn.selected{background:rgba(168,192,216,.05)}
+    .choice-btn.faded{opacity:.35}
+    .choice-letter{font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.18em;color:var(--text-dim);margin-bottom:.8rem;display:flex;align-items:center;gap:.7rem}
+    .check-ring{width:22px;height:22px;border-radius:50%;border:1px solid var(--ash);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .3s}
+    .choice-btn.selected .check-ring{background:var(--sky);border-color:var(--sky)}
+    .check-svg{opacity:0;transition:opacity .3s}
+    .choice-btn.selected .check-svg{opacity:1}
+    .choice-text{font-family:'Cormorant Garamond',serif;font-size:var(--fs-body);font-style:italic;color:var(--cream-d);line-height:1.8}
+    .choice-btn.selected .choice-text{color:var(--cream)}
+
+    .choice-reveal{display:none;margin-top:1.5rem}
+    .choice-reveal.visible{display:block}
+    .insight-block{padding:1.5rem;border-left:2px solid var(--blue-l);background:rgba(26,58,92,.15);margin-bottom:1.2rem}
+    .insight-label{font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.15em;color:var(--blue-l);text-transform:uppercase;margin-bottom:.7rem}
+    .insight-text{font-family:'Cormorant Garamond',serif;font-size:var(--fs-body);font-style:italic;color:var(--cream-d);line-height:1.85}
+
+    .community-stat{display:flex;align-items:center;gap:1rem;padding:1rem 1.2rem;border:1px solid var(--ash)}
+    .stat-bar-wrap{flex:1;height:4px;background:var(--ash);border-radius:2px;overflow:hidden}
+    .stat-bar{height:100%;background:var(--blue-l);border-radius:2px;width:0%;transition:width 1.2s ease .3s}
+    .stat-text{font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.1em;color:var(--text-dim);white-space:nowrap}
+
+    /* ── THEOPHANY SCENE (climax equivalent) ── */
+    .theophany-bg{position:relative;margin:3rem 0;padding:3.5rem 1.5rem;background:linear-gradient(180deg,rgba(7,10,15,0) 0%,rgba(13,21,32,.95) 15%,rgba(13,21,32,.95) 85%,rgba(7,10,15,0) 100%);text-align:center}
+    .theophany-inner{max-width:660px;margin:0 auto}
+    .theophany-label{font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.25em;color:var(--text-dim);text-transform:uppercase;margin-bottom:2rem;display:flex;align-items:center;gap:1rem}
+    .theophany-label::before,.theophany-label::after{content:'';flex:1;height:1px;background:var(--ash)}
+
+    /* Elements passing by */
+    .element-row{display:flex;align-items:center;gap:1.2rem;padding:1.2rem 0;border-bottom:1px solid rgba(46,61,82,.5)}
+    .element-row:first-of-type{border-top:1px solid rgba(46,61,82,.5)}
+    .element-icon{font-size:1.5rem;flex-shrink:0;width:36px;text-align:center}
+    .element-body{flex:1;text-align:left}
+    .element-name{font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.18em;color:var(--text-dim);text-transform:uppercase;margin-bottom:.3rem}
+    .element-desc{font-family:'Cormorant Garamond',serif;font-size:var(--fs-body);font-style:italic;color:var(--cream-d);line-height:1.7}
+    .element-verdict{font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;flex-shrink:0}
+    .verdict-no{color:var(--text-dim)}
+    .verdict-yes{color:var(--sky)}
+
+    /* The still small voice */
+    .still-voice{margin:3rem 0 2rem;text-align:center}
+    .still-voice-label{font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.3em;color:var(--text-dim);text-transform:uppercase;margin-bottom:1.5rem}
+    .still-voice-text{font-family:'Cormorant Garamond',serif;font-size:clamp(1.6rem,5vw,2.8rem);font-weight:300;font-style:italic;color:var(--sky);line-height:1.5;quotes:"\201C" "\201D"}
+    .still-voice-text::before{content:open-quote}
+    .still-voice-text::after{content:close-quote}
+    .still-voice-sub{font-family:'Cormorant Garamond',serif;font-size:var(--fs-body);color:var(--text-dim);line-height:1.8;margin-top:1.2rem;font-style:italic}
+
+    /* ── KEY VERSE ── */
+    .key-verse{text-align:center;padding:3.5rem 1rem;opacity:0;transform:translateY(30px);transition:all 1s ease}
+    .key-verse.visible{opacity:1;transform:translateY(0)}
+    .kv-text{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:300;font-style:italic;color:var(--cream);line-height:1.65}
+    .kv-ref{font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.2em;color:var(--text-dim);display:block;margin-top:1rem}
+
+    /* ── OUTRO ── */
+    .outro-section{margin:0 0 2rem;opacity:0;transform:translateY(30px);transition:all 1s ease}
+    .outro-section.visible{opacity:1;transform:translateY(0)}
+    .outro-wrapper{position:relative;padding:3rem 0;border-top:1px solid var(--ash);border-bottom:1px solid var(--ash)}
+    .outro-wrapper::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 50%,rgba(26,58,92,.07) 0%,transparent 70%);pointer-events:none}
+    .outro-eyebrow{font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.2em;color:var(--text-dim);text-transform:uppercase;text-align:center;margin-bottom:2rem;display:flex;align-items:center;gap:1rem}
+    .outro-eyebrow::before,.outro-eyebrow::after{content:'';flex:1;height:1px;background:var(--ash);opacity:.8}
+    .outro-body{max-width:620px;margin:0 auto;text-align:center}
+    .outro-opening{font-family:'Cormorant Garamond',serif;font-size:var(--fs-body);font-weight:300;color:var(--text-dim);line-height:1.95;margin-bottom:2rem}
+    .outro-challenge{font-family:'Cormorant Garamond',serif;font-size:var(--fs-big);font-weight:300;font-style:italic;color:var(--cream);line-height:1.55;margin-bottom:2.5rem;padding:0 .5rem}
+    .outro-questions{display:flex;flex-direction:column;gap:2px;margin-bottom:2.5rem;background:var(--ash);text-align:left}
+    .outro-q{background:var(--dark);padding:1.5rem;position:relative;overflow:hidden;transition:background .3s}
+    .outro-q::before{content:'';position:absolute;top:0;left:0;width:2px;height:100%;background:var(--blue-l);opacity:0;transition:opacity .3s}
+    .outro-q:hover{background:var(--stone)}
+    .outro-q:hover::before,.outro-q:active::before{opacity:1}
+    .outro-q p{font-family:'Cormorant Garamond',serif;font-size:var(--fs-body);font-style:italic;color:var(--cream-d);line-height:1.85}
+    .outro-q p strong{color:var(--cream);font-style:normal;font-weight:600}
+    .outro-closing{font-family:'Cormorant Garamond',serif;font-size:var(--fs-body);color:var(--text-dim);line-height:1.95;font-style:italic;padding:0 .25rem}
+    .outro-closing em{color:var(--sky);font-style:italic}
+
+    /* ── REFLECTION ── */
+    .reflection-section{margin:2rem 0 4rem;opacity:0;transform:translateY(30px);transition:all .9s ease}
+    .reflection-section.visible{opacity:1;transform:translateY(0)}
+    .altar-header{text-align:center;padding:3rem 1.2rem 2.5rem;border-top:1px solid var(--ash);border-bottom:1px solid var(--ash)}
+    .altar-eyebrow{font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.2em;color:var(--sky);text-transform:uppercase;margin-bottom:1.2rem}
+    .altar-title{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:300;color:var(--cream);line-height:1.2;margin-bottom:1.2rem}
+    .altar-intro{font-family:'Cormorant Garamond',serif;font-size:var(--fs-body);font-style:italic;color:var(--cream-d);line-height:1.9;max-width:580px;margin:0 auto}
+
+    .diary-invite{display:flex;align-items:flex-start;gap:1.2rem;padding:1.5rem;background:rgba(26,58,92,.08);border:1px solid rgba(168,192,216,.18);margin:2rem 0}
+    .diary-icon{font-size:1.6rem;flex-shrink:0;margin-top:.1rem}
+    .diary-invite-text{flex:1}
+    .diary-invite-title{font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.18em;color:var(--sky);text-transform:uppercase;margin-bottom:.6rem}
+    .diary-invite-body{font-family:'Cormorant Garamond',serif;font-size:var(--fs-body);font-style:italic;color:var(--cream-d);line-height:1.85}
+
+    .reflection-cards{display:flex;flex-direction:column;gap:2px;background:var(--ash)}
+    .r-card{background:var(--dark);padding:2rem 1.4rem;position:relative;transition:background .3s}
+    .r-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:var(--ash);transition:background .3s}
+    .r-card:hover,.r-card:focus-within{background:var(--stone)}
+    .r-card:hover::before{background:var(--blue-l)}
+    .r-card.conditional-a::before{background:rgba(196,98,42,.6)}
+    .r-card.conditional-b::before{background:rgba(42,90,140,.6)}
+    .r-card.main::before{background:var(--sky)}
+    .r-badge{display:inline-block;font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.15em;padding:.3rem .7rem;margin-bottom:1rem;border:1px solid}
+    .r-badge.badge-a{color:var(--ember-l);border-color:rgba(196,98,42,.5)}
+    .r-badge.badge-b{color:var(--sky);border-color:rgba(42,90,140,.5)}
+    .r-badge.badge-main{color:var(--sky);border-color:rgba(168,192,216,.3)}
+    .r-question{font-family:'Cormorant Garamond',serif;font-size:var(--fs-body-l);font-weight:400;color:var(--cream);line-height:1.75;margin-bottom:1rem}
+    .r-context{font-family:'Cormorant Garamond',serif;font-size:var(--fs-body);font-style:italic;color:var(--text-dim);line-height:1.75;margin-bottom:1.2rem}
+    .sit-with{display:flex;align-items:center;gap:.7rem}
+    .sit-line{flex:1;height:1px;background:var(--ash)}
+    .sit-text{font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.14em;color:var(--text-dim);text-transform:uppercase;text-align:center;line-height:1.4}
+    .r-card.hidden-card{display:none}
+
+    /* ── FINISH ── */
+    .finish-section{text-align:center;padding:4rem 1.2rem 6rem;opacity:0;transform:translateY(30px);transition:all 1s ease}
+    .finish-section.visible{opacity:1;transform:translateY(0)}
+    .finish-blessing{font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-style:italic;color:var(--sky);line-height:1.75;margin-bottom:.8rem}
+    .finish-ref{font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.2em;color:var(--text-dim);display:block;margin-bottom:3rem}
+    .back-btn{display:inline-flex;align-items:center;gap:.8rem;padding:1rem 2rem;border:1px solid var(--sky);background:transparent;color:var(--sky);font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;transition:all .4s;position:relative;overflow:hidden;cursor:pointer;min-height:52px}
+    .back-btn::before{content:'';position:absolute;inset:0;background:var(--sky);transform:scaleX(0);transform-origin:left;transition:transform .4s ease}
+    .back-btn:hover::before,.back-btn:active::before{transform:scaleX(1)}
+    .back-btn:hover,.back-btn:active{color:var(--dark)}
+    .back-btn span{position:relative;z-index:1}
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+
+    /* ══ TABLET 640px+ ══ */
+    @media(min-width:640px){
+      :root{--fs-body:1.1rem;--fs-body-l:1.28rem;--fs-big:1.85rem;--fs-h1:3.8rem}
+      nav{padding:1.1rem 2rem}
+      .story-wrapper{padding:0 1.8rem}
+      .hero-content{padding:0 2rem}
+      .scene-divider{margin:4.5rem 0 2.5rem}
+      .scene-label{letter-spacing:.22em;white-space:nowrap;text-align:left}
+      .choices-grid{grid-template-columns:1fr 1fr}
+      .choice-btn{padding:2rem 1.6rem}
+      .outro-wrapper{padding:4rem 1.5rem}
+      .r-card{padding:2.5rem 2.2rem}
+    }
+
+    /* ══ DESKTOP 900px+ ══ */
+    @media(min-width:900px){
+      :root{--fs-body:1.18rem;--fs-body-l:1.38rem;--fs-big:2.1rem;--fs-h1:5.2rem}
+      nav{padding:1.1rem 2.5rem}
+      .story-wrapper{padding:0 2rem}
+      .hero-subtitle{font-size:1.25rem}
+      .scene-divider{margin:5rem 0 3rem}
+      .theophany-bg{padding:5rem 3rem}
+      .outro-wrapper{padding:5rem 3rem}
+      .r-card{padding:3rem 2.5rem}
+      .altar-header{padding:4rem 2rem 3rem}
+      .altar-title{font-size:2.8rem}
+      .finish-section{padding:5rem 2rem 8rem}
+      .finish-blessing{font-size:1.9rem}
+    }
+  </style>
+</head>
+<body>
+
+<div class="nav-progress-bar" id="progressBar"></div>
+
+<nav>
+  <a href="index.html" class="nav-back">
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L4 6l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    Kembali
+  </a>
+  <div class="nav-sep"></div>
+  <span class="nav-module">Modul 02 — Api di Tengah Malam</span>
+</nav>
+
+<!-- ══════════ HERO ══════════ -->
+<section class="story-hero">
+  <div class="hero-sky"></div>
+
+  <!-- Stars generated by JS -->
+  <div class="hero-stars" id="starsContainer"></div>
+
+  <!-- Desert landscape SVG -->
+  <svg class="hero-desert" viewBox="0 0 1440 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <defs>
+      <linearGradient id="dg1" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#1a2c40" stop-opacity="0.8"/>
+        <stop offset="100%" stop-color="#070a0f" stop-opacity="1"/>
+      </linearGradient>
+      <linearGradient id="dg2" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#0d1a2e" stop-opacity="0.9"/>
+        <stop offset="100%" stop-color="#070a0f" stop-opacity="1"/>
+      </linearGradient>
+    </defs>
+    <!-- Far dunes -->
+    <path d="M0 300 L0 200 C200 180 350 220 500 190 C650 160 800 200 1000 175 C1200 150 1350 185 1440 170 L1440 300Z" fill="url(#dg1)" opacity="0.6"/>
+    <!-- Near ground -->
+    <path d="M0 300 L0 255 C180 248 300 260 500 252 C700 244 900 258 1100 250 C1280 243 1380 255 1440 258 L1440 300Z" fill="url(#dg2)"/>
+    <!-- Ground flat -->
+    <rect x="0" y="278" width="1440" height="22" fill="#070a0f"/>
+    <!-- Small rocks -->
+    <ellipse cx="200" cy="276" rx="18" ry="4" fill="#0d1520" opacity="0.7"/>
+    <ellipse cx="450" cy="277" rx="12" ry="3" fill="#0d1520" opacity="0.5"/>
+    <ellipse cx="900" cy="275" rx="20" ry="5" fill="#0d1520" opacity="0.6"/>
+    <ellipse cx="1200" cy="276" rx="14" ry="3" fill="#0d1520" opacity="0.5"/>
+  </svg>
+
+  <!-- Juniper tree SVG -->
+  <svg class="hero-tree" viewBox="0 0 120 180" width="90" height="135" xmlns="http://www.w3.org/2000/svg" style="bottom:22px">
+    <!-- Trunk -->
+    <rect x="54" y="100" width="12" height="80" fill="#0a1525" rx="2"/>
+    <!-- Main branches cluster -->
+    <ellipse cx="60" cy="90" rx="35" ry="45" fill="#0c1e2e" opacity="0.9"/>
+    <ellipse cx="42" cy="85" rx="22" ry="30" fill="#0c1e2e" opacity="0.7"/>
+    <ellipse cx="78" cy="88" rx="20" ry="28" fill="#0c1e2e" opacity="0.7"/>
+    <ellipse cx="60" cy="60" rx="25" ry="32" fill="#0d2035" opacity="0.85"/>
+    <!-- Glow underneath (where Elijah sleeps) -->
+    <ellipse cx="60" cy="160" rx="40" ry="8" fill="#c4622a" opacity="0.08"/>
+  </svg>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow">1 Raja-Raja 19 · Modul 02</p>
+    <h1 class="hero-title">Api di<br><em>Tengah Malam</em></h1>
+    <p class="hero-subtitle">Ketika Tuhan Terasa Diam</p>
+    <div class="hero-meta">
+      <span>Perjanjian Lama</span><span style="color:var(--ash)">·</span>
+      <span>± 20 Menit</span><span style="color:var(--ash)">·</span>
+      <span>3 Momen Refleksi</span>
+    </div>
+  </div>
+
+  <div class="scroll-indicator">
+    <span>Mulai Kisah</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ══════════ STORY ══════════ -->
+<div class="story-wrapper">
+
+  <!-- BAGIAN 1 — KEMENANGAN YANG KOSONG -->
+  <div class="scene-divider">
+    <div class="divider-line"></div>
+    <span class="scene-label">Bagian I — Sehari Setelah Kemenangan</span>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="victory-count">
+    <div class="victory-number">450</div>
+    <div class="victory-label">Nabi Baal Dikalahkan</div>
+  </div>
+
+  <div class="narrative-block">
+    <p class="big-text">Kemarin, Elia baru saja melakukan mukjizat terbesar dalam hidupnya.</p>
+  </div>
+
+  <div class="narrative-block">
+    <p>Di atas Gunung Karmel, di hadapan seluruh Israel, ia menantang 450 nabi Baal dalam sebuah ujian tunggal: siapa Allahnya yang akan menjawab dengan api? Nabi-nabi Baal berseru dari pagi hingga sore. Tidak ada jawaban. Tidak ada suara. Tidak ada api.</p>
+    <p>Lalu Elia berdoa satu kali saja—singkat, tenang, penuh percaya. Dan <span class="ember-text">api TUHAN turun, membakar korban bakaran, kayu api, batu, tanah, bahkan air yang ada di selokan itu.</span></p>
+  </div>
+
+  <div class="atm-block ember">
+    <div class="atm-label">🔥 Gunung Karmel</div>
+    <p class="atm-text">Seluruh bangsa tersungkur dan berseru: "TUHAN, Dialah Allah! TUHAN, Dialah Allah!" Itu adalah puncak pelayanan seorang nabi. Elia seharusnya sedang merayakan kemenangan terbesar dalam hidupnya.</p>
+  </div>
+
+  <div class="narrative-block">
+    <p>Tapi kemudian, keesokan paginya, sebuah pesan datang dari Ratu Izebel. Bukan ucapan selamat. Bukan pengakuan kekalahan.</p>
+    <p class="quote-text">"Besok pada waktu ini, aku akan membuat nyawamu seperti nyawa salah seorang dari mereka."</p>
+  </div>
+
+  <div class="narrative-block">
+    <p>Dan Elia—sang nabi yang baru saja memanggil api dari langit—<span class="strong-word">melarikan diri.</span></p>
+    <p class="big-text">Takut. Sendirian. Habis.</p>
+  </div>
+
+  <!-- BAGIAN 2 — TITIK REFLEKSI 1 -->
+  <div class="scene-divider">
+    <div class="divider-line"></div>
+    <span class="scene-label">Bagian II — Cermin Pertama</span>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="choice-section" id="choice1">
+    <div class="choice-intro-label">Momen Refleksi 1 dari 3</div>
+    <p class="choice-framing">Elia baru saja mengalami kemenangan rohani yang luar biasa—lalu langsung jatuh ke dalam ketakutan dan kelelahan mendalam. Ini sering disebut "lembah setelah puncak."</p>
+    <p class="choice-subframing">Dari dua pengalaman berikut, <em>mana yang lebih sering kamu kenali dalam dirimu sendiri?</em></p>
+    <div class="choices-grid">
+      <button class="choice-btn" id="c1a" onclick="makeChoice(1,'A')">
+        <div class="choice-letter">
+          <div class="check-ring"><svg class="check-svg" width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1.5 4.5l2 2L7.5 2" stroke="#070a0f" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          Lebih mencerminkan saya
+        </div>
+        <p class="choice-text">"Setelah menyelesaikan sesuatu yang besar—ujian, pelayanan, perjuangan panjang—aku sering justru merasa kosong, lelah, dan ingin menghilang dari segalanya."</p>
+      </button>
+      <button class="choice-btn" id="c1b" onclick="makeChoice(1,'B')">
+        <div class="choice-letter">
+          <div class="check-ring"><svg class="check-svg" width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1.5 4.5l2 2L7.5 2" stroke="#070a0f" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          Lebih mencerminkan saya
+        </div>
+        <p class="choice-text">"Aku tidak sering mencapai puncak—tapi aku tahu betul perasaan berjalan terus dalam keadaan kosong, berpura-pura baik-baik saja ketika sebenarnya aku sudah hampir kehabisan."</p>
+      </button>
+    </div>
+    <div class="choice-reveal" id="reveal1">
+      <div class="insight-block" id="insight1"></div>
+      <div class="community-stat" id="stat1">
+        <div class="stat-bar-wrap"><div class="stat-bar" id="statbar1"></div></div>
+        <span class="stat-text" id="stattext1"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- BAGIAN 3 — DI BAWAH POHON ARAR -->
+  <div class="scene-divider">
+    <div class="divider-line"></div>
+    <span class="scene-label">Bagian III — Di Bawah Pohon Arar</span>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="narrative-block">
+    <p>Elia berjalan satu hari perjalanan jauhnya ke padang gurun. Sampai di sana, dia duduk di bawah sebuah pohon arar dan memohon satu hal yang mungkin mengejutkan kita:</p>
+    <p class="quote-text">"Cukuplah itu! Sekarang, ya TUHAN, ambillah nyawaku, sebab aku ini tidak lebih baik daripada nenek moyangku."</p>
+  </div>
+
+  <div class="narrative-block">
+    <p>Ini bukan kalimat seorang yang tidak percaya. Ini adalah kalimat seorang yang <span class="emphasis">terlalu percaya, terlalu banyak memberi, dan tidak punya sisa apapun untuk dirinya sendiri.</span></p>
+    <p>Elia tidak minta pertolongan. Dia tidak minta mukjizat lagi. Dia hanya ingin berhenti.</p>
+  </div>
+
+  <div class="turning-point">
+    <span class="turning-icon">🌿</span>
+    <p class="turning-text">Dan Tuhan tidak menjawab dengan khotbah.<br>Tidak dengan teguran.<br>Tidak dengan pertanyaan keras.</p>
+    <p class="turning-text" style="margin-top:1.5rem;color:var(--sky)">Tuhan mengirim malaikat. Dan malaikat itu <em>menyentuh bahunya</em> dan berkata:</p>
+    <p class="turning-text" style="margin-top:1.2rem;font-style:italic;color:var(--cream)">"Bangunlah dan makanlah, sebab perjalananmu masih jauh."</p>
+  </div>
+
+  <div class="narrative-block">
+    <p>Di samping kepalanya ada roti yang dipanggang dan sebuah kendi berisi air. Bukan ceramah. Bukan teguran. <span class="emphasis">Makanan dan air.</span></p>
+    <p>Tuhan bertemu Elia di titik paling manusiawinya—bukan dengan kuasa, melainkan dengan kepedulian yang paling sederhana: <span class="strong-word">kamu lapar, kamu lelah, kamu perlu makan.</span></p>
+  </div>
+
+  <!-- BAGIAN 4 — TITIK REFLEKSI 2 -->
+  <div class="scene-divider">
+    <div class="divider-line"></div>
+    <span class="scene-label">Bagian IV — Cermin Kedua</span>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="narrative-block">
+    <p>Setelah makan dan beristirahat, Elia bangun dan berjalan selama <span class="strong-word">empat puluh hari empat puluh malam</span> hingga sampai ke Gunung Horeb—gunung Allah. Di sana, dia masuk ke dalam sebuah gua dan bermalam.</p>
+    <p>Dan Tuhan bertanya kepadanya sesuatu yang terdengar sederhana, tapi sesungguhnya sangat dalam:</p>
+    <p class="quote-text">"Apakah kerjamu di sini, Elia?"</p>
+  </div>
+
+  <div class="atm-block">
+    <div class="atm-label">🌑 Gua di Gunung Horeb</div>
+    <p class="atm-text">Bukan "mengapa kamu lari?" Bukan "apa yang salah denganmu?" Tuhan bertanya dengan nada yang terasa seperti undangan—seperti seorang ayah yang duduk di samping anaknya dan bertanya: "Cerita, apa yang sebenarnya terjadi?"</p>
+  </div>
+
+  <div class="narrative-block">
+    <p>Elia menjawab dengan seluruh kelelahan hatinya:</p>
+    <p class="quote-text">"Aku bekerja segiat-giatnya bagi TUHAN, Allah semesta alam, karena orang Israel meninggalkan perjanjian-Mu, meruntuhkan mezbah-mezbah-Mu, dan membunuh nabi-nabi-Mu dengan pedang; hanya aku seorang diri yang masih hidup, dan mereka ingin mencabut nyawaku."</p>
+  </div>
+
+  <div class="choice-section" id="choice2">
+    <div class="choice-intro-label">Momen Refleksi 2 dari 3</div>
+    <p class="choice-framing">Elia merasa sendirian dan tidak terlihat. Dia menyebut semua yang sudah dia lakukan—dan merasa tidak ada artinya.</p>
+    <p class="choice-subframing">Ketika kamu merasa kelelahan dalam iman atau pelayanan atau tanggung jawabmu, <em>respons mana yang paling jujur mencerminkan dirimu?</em></p>
+    <div class="choices-grid">
+      <button class="choice-btn" id="c2a" onclick="makeChoice(2,'A')">
+        <div class="choice-letter">
+          <div class="check-ring"><svg class="check-svg" width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1.5 4.5l2 2L7.5 2" stroke="#070a0f" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          Lebih mencerminkan saya
+        </div>
+        <p class="choice-text">"Aku mengungkapkan semuanya—keluhan, kelelahan, rasa tidak dihargai—kepada Tuhan maupun orang lain. Aku butuh didengar."</p>
+      </button>
+      <button class="choice-btn" id="c2b" onclick="makeChoice(2,'B')">
+        <div class="choice-letter">
+          <div class="check-ring"><svg class="check-svg" width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1.5 4.5l2 2L7.5 2" stroke="#070a0f" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          Lebih mencerminkan saya
+        </div>
+        <p class="choice-text">"Aku memendam semuanya sendiri. Aku tidak mau terlihat lemah, bahkan di hadapan Tuhan. Aku pura-pura kuat sampai tidak bisa lagi."</p>
+      </button>
+    </div>
+    <div class="choice-reveal" id="reveal2">
+      <div class="insight-block" id="insight2"></div>
+      <div class="community-stat" id="stat2">
+        <div class="stat-bar-wrap"><div class="stat-bar" id="statbar2"></div></div>
+        <span class="stat-text" id="stattext2"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- BAGIAN 5 — TITIK REFLEKSI 3 -->
+  <div class="scene-divider">
+    <div class="divider-line"></div>
+    <span class="scene-label">Bagian V — Cermin Ketiga</span>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="narrative-block">
+    <p>Tuhan menyuruh Elia berdiri di atas gunung. Dan tiga hal dahsyat melintas di hadapannya satu per satu.</p>
+  </div>
+
+</div><!-- end story-wrapper -->
+
+<!-- THEOPHANY — FULL WIDTH -->
+<div class="theophany-bg">
+  <div class="theophany-inner">
+    <div class="theophany-label">Yang Melintas di Gunung Horeb</div>
+
+    <div class="element-row">
+      <div class="element-icon">🌪</div>
+      <div class="element-body">
+        <div class="element-name">Angin Besar</div>
+        <p class="element-desc">Angin yang membelah gunung-gunung dan memecahkan bukit-bukit batu mendahului TUHAN.</p>
+      </div>
+      <span class="element-verdict verdict-no">Bukan di situ</span>
+    </div>
+
+    <div class="element-row">
+      <div class="element-icon">🌍</div>
+      <div class="element-body">
+        <div class="element-name">Gempa Bumi</div>
+        <p class="element-desc">Tanah berguncang, bumi bergetar di bawah kaki Elia.</p>
+      </div>
+      <span class="element-verdict verdict-no">Bukan di situ</span>
+    </div>
+
+    <div class="element-row">
+      <div class="element-icon">🔥</div>
+      <div class="element-body">
+        <div class="element-name">Api</div>
+        <p class="element-desc">Api yang sama yang kemarin turun membakar mezbah di Karmel—kini melintas di depannya.</p>
+      </div>
+      <span class="element-verdict verdict-no">Bukan di situ</span>
+    </div>
+
+    <div class="still-voice">
+      <div class="still-voice-label">Dan sesudah api itu...</div>
+      <p class="still-voice-text">suara yang pelan dan lembut.</p>
+      <p class="still-voice-sub">
+        Dalam bahasa aslinya: <em>qol demamah daqah</em>—<br>
+        suara keheningan yang tipis. Suara bisikan yang hampir tak terdengar.<br>
+        Dan <span style="color:var(--cream)">di situlah</span> Tuhan ada.
+      </p>
+    </div>
+
+  </div>
+</div>
+
+<div class="story-wrapper">
+
+  <div class="narrative-block" style="margin-top:3rem">
+    <p>Elia mendengar suara itu. Dia menutupi mukanya dengan jubahnya—gestur yang hanya dilakukan ketika seseorang berdiri di hadapan kehadiran yang mahakudus—dan keluar dari gua.</p>
+    <p>Tuhan bertanya lagi. Pertanyaan yang sama persis seperti sebelumnya:</p>
+    <p class="quote-text">"Apakah kerjamu di sini, Elia?"</p>
+  </div>
+
+  <div class="narrative-block">
+    <p>Elia memberikan jawaban yang sama. Kata per kata. Tidak berubah.</p>
+    <p>Dan Tuhan tidak mengoreksinya. Tidak memaksanya melihat kesalahannya. Tuhan justru <span class="emphasis">memberikan tugas baru, memperkenalkan Elisa sebagai penerusnya, dan mengingatkan satu hal yang tidak Elia tahu:</span></p>
+    <p class="quote-text">"Tetapi Aku akan meninggalkan tujuh ribu orang di antara orang Israel, yakni semua orang yang tidak sujud menyembah Baal."</p>
+  </div>
+
+  <div class="narrative-block">
+    <p class="big-text">Kamu tidak sendirian, Elia.<br>Kamu tidak pernah sendirian.</p>
+  </div>
+
+  <!-- TITIK REFLEKSI 3 -->
+  <div class="choice-section" id="choice3">
+    <div class="choice-intro-label">Momen Refleksi 3 dari 3</div>
+    <p class="choice-framing">Tuhan hadir dalam suara yang pelan dan lembut—bukan dalam angin, gempa, atau api. Kehadiran-Nya justru di tempat yang paling sunyi.</p>
+    <p class="choice-subframing">Jika kamu jujur, <em>di mana kamu paling sering mencari Tuhan?</em></p>
+    <div class="choices-grid">
+      <button class="choice-btn" id="c3a" onclick="makeChoice(3,'A')">
+        <div class="choice-letter">
+          <div class="check-ring"><svg class="check-svg" width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1.5 4.5l2 2L7.5 2" stroke="#070a0f" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          Lebih mencerminkan saya
+        </div>
+        <p class="choice-text">"Aku sering menunggu tanda yang besar dan jelas—mukjizat, pengalaman dramatis, sesuatu yang tidak bisa disangkal. Aku kesulitan mendengar Tuhan dalam keheningan."</p>
+      </button>
+      <button class="choice-btn" id="c3b" onclick="makeChoice(3,'B')">
+        <div class="choice-letter">
+          <div class="check-ring"><svg class="check-svg" width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1.5 4.5l2 2L7.5 2" stroke="#070a0f" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          Lebih mencerminkan saya
+        </div>
+        <p class="choice-text">"Aku tahu Tuhan ada di keheningan—tapi aku jarang benar-benar memberi diri untuk sunyi. Hidupku terlalu bising untuk suara yang pelan itu."</p>
+      </button>
+    </div>
+    <div class="choice-reveal" id="reveal3">
+      <div class="insight-block" id="insight3"></div>
+      <div class="community-stat" id="stat3">
+        <div class="stat-bar-wrap"><div class="stat-bar" id="statbar3"></div></div>
+        <span class="stat-text" id="stattext3"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- KEY VERSE -->
+  <div class="key-verse" id="keyVerse">
+    <p class="kv-text">
+      "...dan sesudah api itu<br>
+      <span style="color:var(--sky)">suara yang pelan dan lembut.</span>"
+    </p>
+    <span class="kv-ref">1 Raja-Raja 19:12</span>
+  </div>
+
+  <!-- ══════════ OUTRO ══════════ -->
+  <div class="outro-section" id="outroSection">
+    <div class="outro-wrapper">
+      <div class="outro-eyebrow">Sebelum Kita Melanjutkan</div>
+      <div class="outro-body">
+
+        <p class="outro-opening">
+          Kita hidup di era di mana segala sesuatu harus keras, cepat, dan dramatis untuk dianggap nyata.
+          Notifikasi yang terus berdenting. Konten yang terus bergulir. Percakapan yang tidak pernah berhenti.
+          <br><br>
+          Dalam keadaan seperti itu, bagaimana kita bisa mendengar suara yang pelan dan lembut?
+        </p>
+
+        <p class="outro-challenge">
+          Mungkin Tuhan sudah berbicara.<br>Kita hanya terlalu bising untuk mendengar.
+        </p>
+
+        <div class="outro-questions">
+          <div class="outro-q">
+            <p>Elia yang kelelahan tidak ditegur—dia diberi makan dan diistirahatkan. Itu berarti <strong>kelelahan rohani bukan dosa yang perlu dikutuk, melainkan kondisi yang perlu diperhatikan.</strong> Tapi apakah kita memberi diri kita izin yang sama untuk berhenti?</p>
+          </div>
+          <div class="outro-q">
+            <p>Tuhan bertanya dua kali dengan pertanyaan yang sama: "Apakah kerjamu di sini?" dan Elia menjawab sama persis dua kali. Tuhan tidak memaksa Elia berubah—Dia hanya hadir, mendengar, lalu memberikan arah baru. <strong>Pernahkah kamu membiarkan Tuhan benar-benar mendengarmu—tanpa langsung lari ke doa-doa yang terdengar rohani, tapi justru jujur?</strong></p>
+          </div>
+          <div class="outro-q">
+            <p>Angin, gempa, dan api adalah hal-hal yang kita kejar dalam pengalaman iman kita—retreat yang mengubah hidup, khotbah yang mengguncang, momen emosional yang intens. Tapi Tuhan ada dalam <strong>suara yang pelan dan lembut.</strong> Kapan terakhir kali kamu benar-benar duduk dalam keheningan—bukan untuk berdoa dengan kata-kata, tapi sekadar untuk hadir?</p>
+          </div>
+        </div>
+
+        <p class="outro-closing">
+          Elia tidak menjadi nabi yang lebih baik setelah Horeb karena dia mendapat semangat baru.
+          Dia melanjutkan perjalanannya karena dia bertemu kembali dengan Tuhan yang sudah ada di sana sejak awal—
+          <em>bukan di tempat yang spektakuler, melainkan di dalam keheningan yang paling dalam.</em>
+        </p>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ REFLEKSI — ALTAR PRIBADI ══════════ -->
+  <div class="scene-divider">
+    <div class="divider-line"></div>
+    <span class="scene-label">Bagian VI — Altar Pribadi</span>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="reflection-section" id="reflectionSection">
+
+    <div class="altar-header">
+      <p class="altar-eyebrow">Waktu untuk Berdiam</p>
+      <h2 class="altar-title">Suara di<br>Keheninganmu</h2>
+      <p class="altar-intro">
+        Kisah Elia bukan tentang nabi yang gagal. Ini tentang Tuhan yang tidak pergi ketika kita kehabisan tenaga—dan yang memilih berbicara dalam cara yang paling tidak kita duga.
+      </p>
+    </div>
+
+    <div class="diary-invite">
+      <div class="diary-icon">📖</div>
+      <div class="diary-invite-text">
+        <div class="diary-invite-title">Undangan Refleksi Pribadi</div>
+        <p class="diary-invite-body">
+          Pertanyaan-pertanyaan di bawah bukan untuk dijawab di sini. Bawa mereka ke buku harianmu, atau duduk diam sejenak bersama mereka. Izinkan keheningan itu berbicara—seperti yang dilakukannya kepada Elia.
+        </p>
+      </div>
+    </div>
+
+    <div class="reflection-cards">
+
+      <!-- Kondisional: pilihan 1A — jatuh setelah puncak -->
+      <div class="r-card conditional-a hidden-card" id="rq1a">
+        <div class="r-badge badge-a">Untuk Kamu yang Mengenal Kelelahan Setelah Puncak</div>
+        <p class="r-question">Apa "Gunung Karmel"-mu—sesuatu yang kamu kerahkan habis-habisan—yang meninggalkan kekosongan setelah selesai?</p>
+        <p class="r-context">Tuhan tidak menegur Elia karena jatuh setelah kemenangan. Dia menyentuh bahunya dan menyediakan makanan. Apa yang kamu butuhkan Tuhan sentuh hari ini?</p>
+        <div class="sit-with"><div class="sit-line"></div><span class="sit-text">Duduk dengan pertanyaan ini</span><div class="sit-line"></div></div>
+      </div>
+
+      <!-- Kondisional: pilihan 1B — berjalan kosong -->
+      <div class="r-card conditional-b hidden-card" id="rq1b">
+        <div class="r-badge badge-b">Untuk Kamu yang Sedang Berjalan dalam Keadaan Kosong</div>
+        <p class="r-question">Seberapa lama kamu sudah berjalan "dalam kekuatan sendiri" sebelum mengakui bahwa kamu lelah?</p>
+        <p class="r-context">Malaikat Tuhan berkata kepada Elia: "Bangunlah dan makanlah, sebab perjalananmu masih jauh." Tuhan tahu jalanmu masih panjang. Tapi Dia juga tahu kamu perlu berhenti sejenak. Apa yang perlu kamu izinkan dirimu untuk istirahat hari ini?</p>
+        <div class="sit-with"><div class="sit-line"></div><span class="sit-text">Duduk dengan pertanyaan ini</span><div class="sit-line"></div></div>
+      </div>
+
+      <!-- Kondisional: pilihan 2A — ungkapkan -->
+      <div class="r-card conditional-a hidden-card" id="rq2a">
+        <div class="r-badge badge-a">Untuk Kamu yang Ingin Didengar</div>
+        <p class="r-question">Apa yang selama ini ingin kamu katakan kepada Tuhan tapi belum berani—atau merasa tidak pantas—untuk diucapkan?</p>
+        <p class="r-context">Elia berbicara dengan keras dan apa adanya. Tuhan mendengarnya dua kali. Kejujuran yang menyakitkan lebih dekat dengan Tuhan daripada kesalehan yang berpura-pura baik-baik saja.</p>
+        <div class="sit-with"><div class="sit-line"></div><span class="sit-text">Duduk dengan pertanyaan ini</span><div class="sit-line"></div></div>
+      </div>
+
+      <!-- Kondisional: pilihan 2B — pendam sendiri -->
+      <div class="r-card conditional-b hidden-card" id="rq2b">
+        <div class="r-badge badge-b">Untuk Kamu yang Memendam Segalanya</div>
+        <p class="r-question">Apa yang terjadi jika kamu berhenti berpura-pura kuat—paling tidak di hadapan Tuhan?</p>
+        <p class="r-context">Tuhan tidak kaget dengan kelemahan Elia. Dia tidak mengecewakan Tuhan dengan duduk di bawah pohon dan meminta untuk mati. Tuhan datang dan menyentuhnya. Jubah apa yang selama ini kamu gunakan untuk menutupi kelelahan sejatimu?</p>
+        <div class="sit-with"><div class="sit-line"></div><span class="sit-text">Duduk dengan pertanyaan ini</span><div class="sit-line"></div></div>
+      </div>
+
+      <!-- Kondisional: pilihan 3A — menunggu tanda besar -->
+      <div class="r-card conditional-a hidden-card" id="rq3a">
+        <div class="r-badge badge-a">Untuk Kamu yang Menunggu Tanda yang Besar</div>
+        <p class="r-question">Adakah hal yang mungkin sudah Tuhan bisikkan padamu—tapi kamu abaikan karena terasa terlalu kecil, terlalu biasa, tidak cukup dramatis?</p>
+        <p class="r-context">Suara Tuhan mungkin sudah ada di sana—dalam perkataan seorang teman, dalam ketenangan setelah doa, dalam kata-kata Alkitab yang tidak asing tapi tiba-tiba menyentuh. Kita sering melewatkan Tuhan karena kita sedang menunggu gempa bumi.</p>
+        <div class="sit-with"><div class="sit-line"></div><span class="sit-text">Duduk dengan pertanyaan ini</span><div class="sit-line"></div></div>
+      </div>
+
+      <!-- Kondisional: pilihan 3B — terlalu bising -->
+      <div class="r-card conditional-b hidden-card" id="rq3b">
+        <div class="r-badge badge-b">Untuk Kamu yang Hidupnya Terlalu Bising</div>
+        <p class="r-question">Kapan terakhir kali kamu memberi dirimu sendiri—bukan hanya Tuhan—hadiah berupa keheningan yang sungguh-sungguh?</p>
+        <p class="r-context">Tidak ada yang bisa memaksamu berhenti. Tapi Elia tidak mendengar suara itu di tengah keramaian. Dia mendengarnya di gua, setelah angin, gempa, dan api berlalu. Keheningan bukan kekosongan—ia adalah ruang di mana Tuhan bisa berbisik.</p>
+        <div class="sit-with"><div class="sit-line"></div><span class="sit-text">Duduk dengan pertanyaan ini</span><div class="sit-line"></div></div>
+      </div>
+
+      <!-- Pertanyaan Utama -->
+      <div class="r-card main">
+        <div class="r-badge badge-main">Pertanyaan Utama</div>
+        <p class="r-question">Tuhan bertanya dua kali kepada Elia: "Apakah kerjamu di sini?" Bukan sebagai tuduhan—tapi sebagai undangan untuk hadir, jujur, dan dikenal.</p>
+        <p class="r-context">Sekarang, di titik hidupmu saat ini, apa jawabanmu untuk pertanyaan yang sama? "Apakah kerjamu di sini"—di tengah kelelahanmu, keterasinganmu, atau kesibukanmu hari ini? Dan apakah kamu percaya Tuhan ada di sana, dalam keheningan yang paling tipis sekalipun?</p>
+        <div class="sit-with"><div class="sit-line"></div><span class="sit-text">Bawa ini ke buku harianmu</span><div class="sit-line"></div></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PENUTUP -->
+  <div class="finish-section" id="finishSection">
+    <p class="finish-blessing">
+      "TUHAN Allah semesta alam, <em style="color:var(--sky)">Tuhan yang hadir<br>bukan dalam kebisingan,<br>melainkan dalam keheningan yang paling dalam.</em>"
+    </p>
+    <span class="finish-ref">1 Raja-Raja 19:12 — parafrase</span>
+
+    <div style="margin-bottom:2.5rem">
+      <p style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-style:italic;color:var(--text-dim);line-height:1.9;max-width:500px;margin:0 auto">
+        Kamu sudah menyelesaikan Modul 02. Bawalah pertanyaan-pertanyaan ini bersamamu—dan izinkan dirimu untuk sunyi sejenak. Suara yang pelan itu menunggumu di sana.
+      </p>
+    </div>
+
+    <a href="index.html" class="back-btn">
+      <span>← Kembali ke Semua Modul</span>
+    </a>
+  </div>
+
+</div><!-- end story-wrapper -->
+
+<script>
+  // ── Generate stars
+  const container = document.getElementById('starsContainer');
+  for (let i = 0; i < 80; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = Math.random() * 2 + 1;
+    s.style.cssText = `
+      width:${size}px;height:${size}px;
+      top:${Math.random()*70}%;left:${Math.random()*100}%;
+      --op:${(Math.random()*.5+.2).toFixed(2)};
+      --dur:${(Math.random()*3+2).toFixed(1)}s;
+      --del:-${(Math.random()*4).toFixed(1)}s;
+    `;
+    container.appendChild(s);
+  }
+
+  // ── State
+  const choices = { 1: null, 2: null, 3: null };
+
+  const stats = {
+    '1A':{ pct:58, text:'58% pembaca merasa hal yang sama' },
+    '1B':{ pct:42, text:'42% pembaca merasa hal yang sama' },
+    '2A':{ pct:44, text:'44% pembaca merasa hal yang sama' },
+    '2B':{ pct:56, text:'56% pembaca merasa hal yang sama' },
+    '3A':{ pct:38, text:'38% pembaca merasa hal yang sama' },
+    '3B':{ pct:62, text:'62% pembaca merasa hal yang sama' },
+  };
+
+  const insights = {
+    '1A':{ label:'Yang kamu kenali', text:'Kelelahan setelah memberi habis-habisan adalah salah satu bentuk kerentanan yang paling sah. Tuhan tidak berpaling dari Elia di titik itu—Dia justru datang lebih dekat.' },
+    '1B':{ label:'Yang kamu kenali', text:'Berjalan kosong dalam waktu lama adalah cara paling umum kita menghancurkan diri sendiri tanpa sadar. Ada sesuatu yang akan Tuhan tawarkan kepada Elia—dan kepadamu juga.' },
+    '2A':{ label:'Yang kamu kenali', text:'Elia tidak menyaring kata-katanya di hadapan Tuhan. Dan Tuhan mendengarnya—dua kali, tanpa interupsi. Kejujuran seperti itu adalah doa yang sangat dalam.' },
+    '2B':{ label:'Yang kamu kenali', text:'Ada banyak orang yang tampak kuat di luar tapi sedang duduk di bawah pohon arar di dalam. Tuhan tahu. Dan Dia tidak menunggu kamu mengatakannya dengan sempurna.' },
+    '3A':{ label:'Yang kamu kenali', text:'Kita semua pernah melewatkan suara yang pelan karena sedang menunggu gempa bumi. Tapi perhatikan—setelah tiga peristiwa besar itu berlalu, Elia justru baru keluar dari gua.' },
+    '3B':{ label:'Yang kamu kenali', text:'Kebisingan adalah pertahanan kita dari hal-hal yang tidak ingin kita dengar—termasuk dari Tuhan. Tapi juga dari diri kita sendiri. Keheningan itu menakutkan justru karena jujur.' },
+  };
+
+  // Progress bar
+  window.addEventListener('scroll', () => {
+    const d = document.documentElement;
+    const pct = (d.scrollTop || document.body.scrollTop) / (d.scrollHeight - d.clientHeight) * 100;
+    document.getElementById('progressBar').style.width = pct + '%';
+  });
+
+  // Scroll reveal
+  const io = new IntersectionObserver(e => {
+    e.forEach(x => { if (x.isIntersecting) x.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.narrative-block,.scene-divider,.atm-block,.victory-count,.choice-section,.turning-point,.key-verse,.outro-section,.reflection-section,.finish-section').forEach(el => io.observe(el));
+
+  // Choice logic
+  function makeChoice(round, letter) {
+    choices[round] = letter;
+
+    const a = document.getElementById(`c${round}a`);
+    const b = document.getElementById(`c${round}b`);
+    a.classList.remove('selected','faded');
+    b.classList.remove('selected','faded');
+
+    if (letter === 'A') { a.classList.add('selected'); b.classList.add('faded'); }
+    else { b.classList.add('selected'); a.classList.add('faded'); }
+
+    const key = round + letter;
+    const ins = insights[key];
+    document.getElementById(`insight${round}`).innerHTML =
+      `<div class="insight-label">${ins.label}</div><p class="insight-text">${ins.text}</p>`;
+
+    const s = stats[key];
+    document.getElementById(`stattext${round}`).textContent = s.text;
+    document.getElementById(`reveal${round}`).classList.add('visible');
+    setTimeout(() => document.getElementById(`statbar${round}`).style.width = s.pct + '%', 100);
+
+    updateReflectionCards();
+
+    setTimeout(() => {
+      const targets = { 1: '.scene-divider:nth-of-type(4)', 2: '.scene-divider:nth-of-type(6)', 3: '#keyVerse' };
+      const el = document.querySelector(targets[round]);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 900);
+  }
+
+  function updateReflectionCards() {
+    document.querySelectorAll('.r-card[class*="conditional"]').forEach(el => el.classList.add('hidden-card'));
+    const c1 = choices[1], c2 = choices[2], c3 = choices[3];
+    if (c1 === 'A') document.getElementById('rq1a').classList.remove('hidden-card');
+    else if (c1 === 'B') document.getElementById('rq1b').classList.remove('hidden-card');
+    if (c2 === 'A') document.getElementById('rq2a').classList.remove('hidden-card');
+    else if (c2 === 'B') document.getElementById('rq2b').classList.remove('hidden-card');
+    if (c3 === 'A') document.getElementById('rq3a').classList.remove('hidden-card');
+    else if (c3 === 'B') document.getElementById('rq3b').classList.remove('hidden-card');
+
+    if (c1 && c2 && c3) {
+      setTimeout(() => {
+        const fs = document.getElementById('finishSection');
+        fs.classList.add('visible');
+      }, 300);
+    }
+  }
+</script>
+</body>
+</html>
