@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modul 02 — Cangkir dan Samudera · The Weaver's Silence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Cinzel:wght@400;600;700&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --accent: #3a6a8a;
+    --accent-light: #6a9ab8;
+    --accent-pale: #2a5070;
+    --gold: #b89a5a;
+    --cream: #dce8ee;
+    --text-main: #a8bcc8;
+    --text-dim: #5a7080;
+    --dark: #070c10;
+    --dark-mid: #0c141a;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--dark);
+    color: var(--text-main);
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  body::after {
+    content: '';
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 9999;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 256px;
+  }
+
+  .progress-bar {
+    position: fixed; top: 0; left: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent-pale), var(--accent-light));
+    z-index: 200; width: 0%;
+    transition: width 0.1s linear;
+  }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100; padding: 1.2rem 3rem;
+    display: flex; align-items: center; justify-content: space-between;
+    backdrop-filter: blur(12px);
+    background: rgba(7,12,16,0.65);
+    border-bottom: 1px solid rgba(58,106,138,0.12);
+  }
+
+  .nav-back {
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem; letter-spacing: 0.25em;
+    color: var(--text-dim); text-decoration: none;
+    text-transform: uppercase; transition: color 0.3s;
+    display: flex; align-items: center; gap: 0.6rem;
+  }
+  .nav-back:hover { color: var(--accent-light); }
+  .nav-back svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+
+  .nav-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem; letter-spacing: 0.2em;
+    color: var(--accent-light); text-transform: uppercase;
+  }
+
+  .nav-module {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic; font-size: 0.85rem;
+    color: var(--text-dim);
+  }
+
+  /* HERO */
+  .hero {
+    height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+
+  .hero-canvas { position: absolute; inset: 0; z-index: 0; }
+
+  .hero-content {
+    position: relative; z-index: 2;
+    text-align: center; padding: 0 2rem;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem; letter-spacing: 0.4em;
+    color: var(--accent-light); text-transform: uppercase;
+    margin-bottom: 2rem;
+    opacity: 0; animation: fadeUp 1.2s 0.5s ease forwards;
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.8rem, 7vw, 6rem);
+    font-weight: 300; line-height: 1.08;
+    color: var(--cream); letter-spacing: 0.02em;
+    opacity: 0; animation: fadeUp 1.2s 0.8s ease forwards;
+  }
+
+  .hero-title em { font-style: italic; color: var(--accent-light); }
+
+  .hero-verse {
+    margin-top: 2.5rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(0.9rem, 1.8vw, 1.1rem);
+    font-style: italic; color: var(--text-dim);
+    letter-spacing: 0.05em;
+    max-width: 560px; margin-left: auto; margin-right: auto;
+    opacity: 0; animation: fadeUp 1.2s 1.2s ease forwards;
+  }
+
+  .hero-verse strong { color: var(--gold); font-style: normal; font-weight: 400; }
+
+  .scroll-cue {
+    position: absolute; bottom: 2.5rem; left: 50%;
+    transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+    opacity: 0; animation: fadeUp 1.2s 2s ease forwards; z-index: 2;
+  }
+
+  .scroll-cue span {
+    font-family: 'Cinzel', serif; font-size: 0.58rem;
+    letter-spacing: 0.3em; color: var(--text-dim); text-transform: uppercase;
+  }
+
+  .scroll-line {
+    width: 1px; height: 40px;
+    background: linear-gradient(180deg, var(--accent-light), transparent);
+    animation: scrollPulse 2s infinite;
+  }
+
+  /* CHAPTERS */
+  .chapter {
+    max-width: 720px; margin: 0 auto;
+    padding: 7rem 2rem;
+  }
+
+  .chapter-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.58rem; letter-spacing: 0.4em;
+    color: var(--accent-light); text-transform: uppercase;
+    margin-bottom: 1.5rem; display: block;
+  }
+
+  .chapter h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+    font-weight: 300; color: var(--cream);
+    line-height: 1.2; margin-bottom: 2.5rem;
+  }
+
+  .chapter h2 em { font-style: italic; color: var(--accent-light); }
+
+  .prose {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.05rem, 2vw, 1.22rem);
+    line-height: 1.95; color: var(--text-main);
+    font-weight: 300;
+  }
+
+  .prose + .prose { margin-top: 1.8rem; }
+  .prose em { color: var(--accent-light); font-style: italic; }
+  .prose strong { color: var(--cream); font-weight: 400; }
+
+  .scene-break {
+    display: flex; align-items: center; gap: 1rem;
+    margin: 4rem auto; max-width: 300px;
+  }
+  .scene-break::before, .scene-break::after {
+    content: ''; flex: 1; height: 1px;
+  }
+  .scene-break::before { background: linear-gradient(90deg, transparent, rgba(58,106,138,0.3)); }
+  .scene-break::after { background: linear-gradient(90deg, rgba(58,106,138,0.3), transparent); }
+  .scene-gem { width: 5px; height: 5px; border: 1px solid var(--accent); transform: rotate(45deg); }
+
+  .verse-block {
+    margin: 4rem 0; padding: 2.5rem 3rem;
+    border-left: 2px solid var(--accent-pale);
+    background: rgba(58,106,138,0.06);
+  }
+
+  .verse-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.1rem, 2vw, 1.3rem);
+    font-style: italic; line-height: 1.8;
+    color: var(--cream); font-weight: 300;
+  }
+
+  .verse-ref {
+    margin-top: 1rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem; letter-spacing: 0.3em;
+    color: var(--accent-light); text-transform: uppercase;
+  }
+
+  /* VISION BOX — the overwhelming omniscience -->*/
+  .vision-box {
+    margin: 3rem 0;
+    padding: 3rem;
+    border: 1px solid rgba(58,106,138,0.2);
+    background: rgba(10,16,22,0.9);
+    position: relative; overflow: hidden;
+  }
+
+  .vision-box::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(58,106,138,0.15), transparent 60%);
+  }
+
+  .vision-box-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.58rem; letter-spacing: 0.4em;
+    color: var(--accent-light); text-transform: uppercase;
+    margin-bottom: 2rem; display: block;
+    position: relative; z-index: 1;
+  }
+
+  .vision-lines {
+    position: relative; z-index: 1;
+  }
+
+  .vision-line {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(0.95rem, 1.8vw, 1.1rem);
+    line-height: 1.7; color: var(--text-main);
+    font-style: italic; padding: 0.4rem 0;
+    border-bottom: 1px solid rgba(58,106,138,0.06);
+    opacity: 0.9;
+  }
+
+  .vision-line:last-child { border-bottom: none; }
+  .vision-line.dim { opacity: 0.4; color: var(--text-dim); }
+  .vision-line.bright { opacity: 1; color: var(--cream); }
+  .vision-line.breaking { opacity: 0.7; color: var(--accent-light); }
+
+  /* ELIAN SPEECH */
+  .elian-speech {
+    margin: 3rem 0; padding: 2.5rem 2.5rem 2.5rem 3.5rem;
+    background: rgba(58,106,138,0.07);
+    border-left: 3px solid var(--accent);
+    position: relative;
+  }
+
+  .elian-speech::before {
+    content: '"';
+    position: absolute; top: -0.8rem; left: 1.5rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 6rem; line-height: 1;
+    color: var(--accent-pale); opacity: 0.4;
+  }
+
+  .elian-speech p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.15rem, 2.2vw, 1.4rem);
+    font-style: italic; line-height: 1.85;
+    color: var(--cream); font-weight: 300;
+  }
+
+  .elian-speech .speaker {
+    margin-top: 1.2rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem; letter-spacing: 0.3em;
+    color: var(--accent-light); text-transform: uppercase;
+    font-style: normal;
+  }
+
+  /* CHOICE SECTION */
+  .choice-section {
+    max-width: 720px; margin: 0 auto;
+    padding: 0 2rem 8rem;
+  }
+
+  .choice-header { text-align: center; margin-bottom: 4rem; }
+
+  .choice-header h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 300; color: var(--cream);
+    line-height: 1.3; margin-bottom: 1rem;
+  }
+
+  .choice-header p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem; font-style: italic; color: var(--text-dim);
+  }
+
+  .choice-container {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 1.5rem; margin-bottom: 3rem;
+  }
+
+  .choice-btn {
+    padding: 2.5rem 2rem; border: 1px solid rgba(58,106,138,0.2);
+    background: transparent; cursor: pointer; text-align: left;
+    transition: all 0.4s ease; position: relative; overflow: hidden;
+  }
+
+  .choice-btn::before {
+    content: ''; position: absolute; inset: 0;
+    background: rgba(58,106,138,0.08); opacity: 0; transition: opacity 0.4s;
+  }
+
+  .choice-btn:hover::before { opacity: 1; }
+  .choice-btn:hover { border-color: rgba(58,106,138,0.5); }
+  .choice-btn.selected { border-color: var(--accent); background: rgba(58,106,138,0.12); }
+  .choice-btn.dimmed { opacity: 0.4; pointer-events: none; }
+
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem; letter-spacing: 0.3em;
+    color: var(--accent-light); text-transform: uppercase;
+    margin-bottom: 1rem; display: block;
+  }
+
+  .choice-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.05rem, 2vw, 1.25rem);
+    font-weight: 400; color: var(--cream);
+    line-height: 1.4; margin-bottom: 0.8rem;
+  }
+
+  .choice-desc { font-size: 0.82rem; line-height: 1.7; color: var(--text-dim); }
+
+  /* INSIGHT + STAT */
+  .insight-card {
+    padding: 3rem; border: 1px solid rgba(184,154,90,0.2);
+    background: rgba(7,12,16,0.8); display: none; position: relative;
+  }
+
+  .insight-card.visible { display: block; }
+
+  .insight-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 2px; background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  .insight-eyebrow {
+    font-family: 'Cinzel', serif; font-size: 0.6rem; letter-spacing: 0.35em;
+    color: var(--gold); text-transform: uppercase; margin-bottom: 1.5rem; display: block;
+  }
+
+  .insight-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.05rem, 2vw, 1.25rem);
+    font-style: italic; line-height: 1.9;
+    color: var(--cream); font-weight: 300;
+  }
+
+  .stat-area { margin: 3rem 0 2rem; display: none; }
+  .stat-area.visible { display: block; }
+
+  .stat-label {
+    font-family: 'Cinzel', serif; font-size: 0.58rem; letter-spacing: 0.3em;
+    color: var(--text-dim); text-transform: uppercase; margin-bottom: 1rem; display: block;
+  }
+
+  .stat-bar-wrap { display: flex; gap: 2px; height: 4px; margin-bottom: 0.6rem; }
+  .stat-bar-a { height: 100%; background: var(--accent); transition: width 1.2s ease; }
+  .stat-bar-b { height: 100%; background: #7a5a90; transition: width 1.2s ease; }
+
+  .stat-values {
+    display: flex; justify-content: space-between;
+    font-size: 0.78rem; color: var(--text-dim);
+    font-family: 'Cinzel', serif; letter-spacing: 0.1em;
+  }
+
+  .reflection-card {
+    margin-top: 3rem; padding: 3rem;
+    background: rgba(58,106,138,0.06);
+    border: 1px solid rgba(58,106,138,0.15); display: none;
+  }
+
+  .reflection-card.visible { display: block; }
+
+  .reflection-title {
+    font-family: 'Cinzel', serif; font-size: 0.62rem; letter-spacing: 0.35em;
+    color: var(--accent-light); text-transform: uppercase;
+    margin-bottom: 1.5rem; display: block;
+  }
+
+  .reflection-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.05rem, 2vw, 1.2rem);
+    line-height: 1.9; color: var(--text-main);
+  }
+
+  .reflection-text em { color: var(--accent-light); }
+
+  .reflection-verse {
+    margin-top: 2rem; padding-top: 2rem;
+    border-top: 1px solid rgba(58,106,138,0.12);
+  }
+
+  .reflection-verse p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem; font-style: italic; color: var(--text-dim); line-height: 1.8;
+  }
+
+  .reflection-verse cite {
+    display: block; margin-top: 0.8rem;
+    font-family: 'Cinzel', serif; font-size: 0.6rem; letter-spacing: 0.3em;
+    color: var(--gold); text-transform: uppercase;
+  }
+
+  /* FINISH */
+  .finish-section {
+    max-width: 720px; margin: 0 auto;
+    padding: 0 2rem 10rem; text-align: center; display: none;
+  }
+
+  .finish-section.visible { display: block; }
+
+  .finish-section h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 300; color: var(--cream); margin-bottom: 1.5rem;
+  }
+
+  .finish-section p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem; font-style: italic;
+    color: var(--text-dim); line-height: 1.9; margin-bottom: 3rem;
+  }
+
+  .next-link {
+    display: inline-block; padding: 1rem 3rem;
+    border: 1px solid rgba(58,106,138,0.4);
+    color: var(--accent-light); text-decoration: none;
+    font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.3em;
+    text-transform: uppercase; transition: all 0.4s;
+    background: rgba(58,106,138,0.08);
+  }
+
+  .next-link:hover { background: rgba(58,106,138,0.2); border-color: var(--accent); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+
+  .reveal {
+    opacity: 0; transform: translateY(28px);
+    transition: opacity 0.9s ease, transform 0.9s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 640px) {
+    nav { padding: 1rem 1.5rem; }
+    .chapter { padding: 5rem 1.5rem; }
+    .choice-container { grid-template-columns: 1fr; }
+    .verse-block { padding: 1.8rem 1.5rem; }
+    .vision-box { padding: 2rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<nav>
+  <a class="nav-back" href="index.html">
+    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/><line x1="9" y1="12" x2="20" y2="12"/></svg>
+    Kembali
+  </a>
+  <span class="nav-title">Modul 02</span>
+  <span class="nav-module">Cangkir dan Samudera</span>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <svg class="hero-canvas" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="hero-bg2" cx="50%" cy="40%" r="65%">
+        <stop offset="0%" stop-color="#0d1e2c"/>
+        <stop offset="100%" stop-color="#070c10"/>
+      </radialGradient>
+      <filter id="soft2"><feGaussianBlur stdDeviation="2.5"/></filter>
+      <filter id="lens"><feGaussianBlur stdDeviation="1"/></filter>
+    </defs>
+    <rect width="1440" height="900" fill="url(#hero-bg2)"/>
+
+    <!-- Stars — the "seeing everything" -->
+    <g fill="#8aafcc">
+      <circle cx="150" cy="120" r="1" opacity="0.4"/>
+      <circle cx="280" cy="80" r="1.5" opacity="0.3"/>
+      <circle cx="420" cy="200" r="1" opacity="0.5"/>
+      <circle cx="560" cy="60" r="1" opacity="0.3"/>
+      <circle cx="690" cy="140" r="2" opacity="0.35"/>
+      <circle cx="820" cy="90" r="1" opacity="0.4"/>
+      <circle cx="950" cy="170" r="1.5" opacity="0.3"/>
+      <circle cx="1100" cy="50" r="1" opacity="0.5"/>
+      <circle cx="1240" cy="110" r="1" opacity="0.4"/>
+      <circle cx="1380" cy="180" r="1.5" opacity="0.3"/>
+      <circle cx="200" cy="300" r="1" opacity="0.2"/>
+      <circle cx="350" cy="380" r="1.5" opacity="0.2"/>
+      <circle cx="500" cy="320" r="1" opacity="0.25"/>
+      <circle cx="900" cy="350" r="1" opacity="0.2"/>
+      <circle cx="1050" cy="280" r="1.5" opacity="0.25"/>
+      <circle cx="1200" cy="400" r="1" opacity="0.2"/>
+      <circle cx="100" cy="500" r="1" opacity="0.15"/>
+      <circle cx="1340" cy="480" r="1" opacity="0.15"/>
+    </g>
+
+    <!-- Magnifying glass — the stolen lens -->
+    <circle cx="720" cy="430" r="200" fill="none" stroke="#3a6a8a" stroke-width="1.5" opacity="0.12"/>
+    <circle cx="720" cy="430" r="196" fill="none" stroke="#6a9ab8" stroke-width="0.5" opacity="0.06"/>
+    <circle cx="720" cy="430" r="150" fill="none" stroke="#3a6a8a" stroke-width="0.5" stroke-dasharray="3,8" opacity="0.08"/>
+
+    <!-- Glass handle -->
+    <line x1="874" y1="584" x2="960" y2="700" stroke="#3a6a8a" stroke-width="2" opacity="0.12"/>
+    <line x1="877" y1="587" x2="963" y2="703" stroke="#6a9ab8" stroke-width="1" opacity="0.06"/>
+
+    <!-- Infinite lines INSIDE the lens — all the knowledge -->
+    <g stroke="#6a9ab8" stroke-width="0.4" opacity="0.07">
+      <line x1="540" y1="300" x2="900" y2="560"/>
+      <line x1="540" y1="320" x2="900" y2="540"/>
+      <line x1="560" y1="280" x2="880" y2="580"/>
+      <line x1="580" y1="260" x2="860" y2="600"/>
+      <line x1="620" y1="250" x2="820" y2="610"/>
+      <line x1="660" y1="240" x2="780" y2="620"/>
+      <line x1="700" y1="235" x2="740" y2="625"/>
+      <line x1="720" y1="230" x2="720" y2="630"/>
+      <line x1="540" y1="430" x2="900" y2="430"/>
+      <line x1="540" y1="410" x2="900" y2="450"/>
+      <line x1="540" y1="390" x2="900" y2="470"/>
+    </g>
+
+    <!-- Blue ambient inside lens -->
+    <circle cx="720" cy="430" r="180" fill="#1a3a5a" opacity="0.08"/>
+    <ellipse cx="720" cy="430" rx="180" ry="140" fill="#0a1f30" opacity="0.04" filter="url(#soft2)"/>
+  </svg>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow">Modul 02 · The Weaver's Silence</p>
+    <h1 class="hero-title"><em>Cangkir</em> dan<br>Samudera</h1>
+    <p class="hero-verse">
+      <strong>"Sebab rancangan-Ku bukanlah rancanganmu,<br>dan jalanmu bukanlah jalan-Ku."</strong><br>
+      Yesaya 55:8
+    </p>
+  </div>
+
+  <div class="scroll-cue">
+    <span>Baca kisahnya</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- CHAPTER 1 — THE THEFT -->
+<section class="chapter">
+  <span class="chapter-label reveal">I. Mencuri Terang Sang Penenun</span>
+  <h2 class="reveal">Kaca yang <em>Seharusnya</em> Tidak Disentuh</h2>
+
+  <p class="prose reveal">Seminggu setelah malam di depan permadani, Elian masih membawa pertanyaan yang sama. Tapi kali ini, ia membawa sesuatu yang berbeda: sebuah rencana.</p>
+
+  <p class="prose reveal">Di pojok paling tersembunyi Balai Penenun, tersimpan sebuah Kaca Pembesar Agung dalam kotak kaca yang dikunci. Guru Tamari pernah berkata bahwa benda itu hanya untuk Sang Penenun sendiri — karena hanya Dia yang sanggup menanggung beratnya melihat <em>segalanya</em> sekaligus: setiap kemungkinan, setiap konsekuensi, setiap alasan di balik setiap benang yang putus.</p>
+
+  <p class="prose reveal">Elian mencuri kuncinya saat Guru Tamari tertidur. Pukul dua dini hari, ia masuk ke ruangan itu sendirian.</p>
+
+  <div class="scene-break reveal"><div class="scene-gem"></div></div>
+
+  <p class="prose reveal">Logikanya sederhana: <em>Jika aku bisa melihat seperti Sang Penenun melihat, aku bisa memahami mengapa Lira harus pergi.</em> Jika ada alasan yang cukup besar, maka rasa sakitnya bisa ditanggung. Mungkin bahkan bisa dimaafkan.</p>
+
+  <p class="prose reveal">Ia mengambil kaca itu. Dingin di tangannya. Berat, lebih berat dari yang seharusnya untuk ukurannya. Ia mengangkatnya ke matanya — dan melihat.</p>
+</section>
+
+<!-- CHAPTER 2 — THE VISION -->
+<section class="chapter" style="padding-top: 0;">
+  <span class="chapter-label reveal">II. Apa yang Terlihat di Balik Kaca</span>
+  <h2 class="reveal">Pengetahuan yang <em>Menghancurkan</em></h2>
+
+  <p class="prose reveal">Pertama, ia melihat Aethelgard dari atas — seluruh kota, setiap jalan, setiap rumah. Ia melihat keluarga Lira sedang tidur, ayahnya yang masih menggenggam selimut Lira dengan tangan tertutup. Elian hampir menurunkan kaca itu karena tidak sanggup.</p>
+
+  <p class="prose reveal">Tapi ia tidak menurunkannya. Ia terus melihat.</p>
+
+  <div class="vision-box reveal">
+    <span class="vision-box-label">Yang Terlihat Elian Melalui Kaca — Berurutan</span>
+    <div class="vision-lines">
+      <p class="vision-line bright">Seluruh peta penyebaran wabah, tiap benang yang akan putus berikutnya...</p>
+      <p class="vision-line">Jutaan keputusan yang dibuat manusia setiap jam, beserta konsekuensinya...</p>
+      <p class="vision-line dim">Setiap doa yang pernah dipanjatkan di Aethelgard sejak kota ini berdiri...</p>
+      <p class="vision-line">Seluruh kesedihan yang pernah ada dan yang akan ada, sekaligus...</p>
+      <p class="vision-line dim">Wabah-wabah lain di kota-kota lain, di zaman-zaman lain...</p>
+      <p class="vision-line breaking">Seluruh alasan di balik setiap penderitaan, terlalu banyak untuk ditampung dalam satu pikiran...</p>
+      <p class="vision-line dim">Dan kemudian... kegelapan. Karena otaknya tidak dirancang untuk ini.</p>
+    </div>
+  </div>
+
+  <p class="prose reveal">Elian jatuh ke lutut. Kaca itu lepas dari tangannya, berdenging nyaring di lantai batu. Tangannya gemetar, matanya memanas, kepalanya seperti hendak terbelah dari dalam.</p>
+
+  <p class="prose reveal">Dan ia menyadari sesuatu yang tidak pernah terpikir sebelumnya: <strong>mengetahui segala sesuatu berarti menanggung seluruh duka seluruh semesta, sekaligus, tanpa henti.</strong> Tidak ada manusia yang bisa selamat dari beban seperti itu.</p>
+
+  <div class="verse-block reveal">
+    <p class="verse-text">"Sebab rancangan-Ku bukanlah rancanganmu, dan jalanmu bukanlah jalan-Ku, demikianlah firman Tuhan. Seperti tingginya langit dari bumi, demikianlah tingginya jalan-Ku dari jalanmu dan rancangan-Ku dari rancanganmu."</p>
+    <span class="verse-ref">Yesaya 55:8–9</span>
+  </div>
+</section>
+
+<!-- CHAPTER 3 — THE REALIZATION -->
+<section class="chapter" style="padding-top: 0;">
+  <span class="chapter-label reveal">III. Cangkir yang Tidak Cukup Besar</span>
+  <h2 class="reveal">Keterbatasan Sebagai <em>Perlindungan</em></h2>
+
+  <p class="prose reveal">Ia berbaring di lantai dingin itu, kaca di sampingnya, selama yang ia tidak tahu berapa lama. Dan pelan-pelan, satu pikiran membentuk dirinya sendiri di benak Elian — bukan sebagai suara, bukan sebagai kata-kata, tapi sebagai pemahaman yang terasa seperti tangan di bahunya.</p>
+
+  <div class="elian-speech reveal">
+    <p>Jika manusia bisa melihat segalanya... kita semua akan gila karena duka dunia. Setiap detik, ada ribuan Lira yang lain. Di kota-kota yang tidak kita kenal, dalam bahasa-bahasa yang tidak kita mengerti. Jika semua itu harus aku tanggung bersamaan — tidak ada yang tersisa dariku untuk berdiri dan melakukan apa pun.</p>
+    <p style="margin-top: 1rem;">Mungkin... menjadi terbatas adalah cara Sang Penenun melindungi aku dari kehancuran yang lebih dalam.</p>
+    <span class="speaker">— Elian, berbaring di lantai Balai Penenun</span>
+  </div>
+
+  <p class="prose reveal">Ia mengambil kaca itu dan meletakkannya kembali ke dalam kotak. Tangannya masih gemetar. Tapi ada sesuatu yang berbeda — bukan jawaban, bukan pemahaman penuh — melainkan sebuah <em>kerendahan hati yang tiba-tiba</em>. Seperti seseorang yang mencoba mengisi samudera dengan cangkir, lalu tersadar bahwa cangkirnya tidak dirancang untuk itu. Dan itu bukan kekurangan cangkir — itu memang rancangan dari semula.</p>
+
+  <div class="scene-break reveal"><div class="scene-gem"></div></div>
+</section>
+
+<!-- CHOICE SECTION -->
+<section class="choice-section">
+  <div class="choice-header reveal">
+    <span style="font-family:'Cinzel',serif; font-size:0.6rem; letter-spacing:0.4em; color:var(--accent-light); text-transform:uppercase; display:block; margin-bottom:1.5rem;">Momen Refleksi</span>
+    <h3>Kaca itu sudah dikembalikan.<br>Tapi pertanyaannya masih ada.</h3>
+    <p>Apa yang Elian pilih untuk dipegang setelah pengalaman itu?</p>
+  </div>
+
+  <div class="choice-container reveal" id="choiceContainer">
+    <button class="choice-btn" onclick="makeChoice('A')" id="btnA">
+      <span class="choice-letter">Pilihan A</span>
+      <h4 class="choice-title">Tetap Ingin Tahu Segalanya</h4>
+      <p class="choice-desc">Rasa sakit pengalaman tadi tidak cukup. Elian masih percaya bahwa jika ia bisa menemukan cara lain — logika yang lebih kuat, penjelasan yang lebih lengkap — ia bisa memahami dan merelakan Lira.</p>
+    </button>
+
+    <button class="choice-btn" onclick="makeChoice('B')" id="btnB">
+      <span class="choice-letter">Pilihan B</span>
+      <h4 class="choice-title">Menerima Batas sebagai Rahmat</h4>
+      <p class="choice-desc">Elian memilih untuk berhenti mencari jawaban yang ia tidak dirancang untuk tanggung. Bukan menyerah — tapi mempercayakan pemahaman itu kepada yang memang memiliki kapasitasnya.</p>
+    </button>
+  </div>
+
+  <div class="stat-area" id="statArea">
+    <span class="stat-label">Pilihan Komunitas</span>
+    <div class="stat-bar-wrap">
+      <div class="stat-bar-a" id="statBarA" style="width:0%"></div>
+      <div class="stat-bar-b" id="statBarB" style="width:0%"></div>
+    </div>
+    <div class="stat-values">
+      <span>Tetap Ingin Tahu — <span id="statNumA">0</span>%</span>
+      <span><span id="statNumB">0</span>% — Menerima Batas</span>
+    </div>
+  </div>
+
+  <div class="insight-card" id="insightCard">
+    <span class="insight-eyebrow">Renungan</span>
+    <p class="insight-text" id="insightText"></p>
+  </div>
+
+  <div class="reflection-card" id="reflectionCard">
+    <span class="reflection-title">Perspektif dari Kaca yang Dikembalikan</span>
+    <p class="reflection-text" id="reflectionText"></p>
+    <div class="reflection-verse" id="reflectionVerse"></div>
+  </div>
+</section>
+
+<!-- FINISH SECTION -->
+<section class="finish-section" id="finishSection">
+  <h3>Elian Menutup Kotak Kaca Itu</h3>
+  <p>Ia tidak mendapat jawaban tentang Lira. Tapi ia mendapat sesuatu yang lebih berharga: kesadaran bahwa pertanyaannya memang belum dirancang untuk dijawab oleh manusia — dan bahwa ada Seseorang yang cukup besar untuk menanggung jawaban itu di tempat Elian tidak bisa.</p>
+  <a href="modul-03.html" class="next-link">Lanjut ke Modul 03 — Benang Hitam →</a>
+</section>
+
+<script>
+  window.addEventListener('scroll', () => {
+    const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+    document.getElementById('progressBar').style.width = pct + '%';
+  });
+
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  const insights = {
+    A: `Ada jenis rasa sakit yang membuatnya hampir mustahil untuk berhenti mencari — karena berhenti terasa seperti pengkhianatan terhadap orang yang kita cintai. "Jika aku berhenti mencari alasannya, berarti aku menerima bahwa kepergian Lira tidak apa-apa." Tapi itu bukan logika yang benar. <em>Menerima batas bukan berarti mengiyakan bahwa kematian itu baik — itu berarti mengakui bahwa kita tidak memiliki kapasitas untuk memegang semua jawabannya sekaligus.</em>`,
+    B: `Iman yang dewasa bukan iman yang tidak punya pertanyaan. <em>Iman yang dewasa adalah iman yang cukup percaya untuk menitipkan pertanyaannya kepada yang lebih besar.</em> Seorang anak kecil tidak perlu memahami cara kerja seluruh sistem perbankan untuk mempercayai bahwa uang sakunya aman di tangan orang tuanya. Batas Elian bukan kelemahan — itu desain.`
+  };
+
+  const reflections = {
+    A: {
+      text: `Manusia sering membangun <em>"teologi kontrol"</em> — keyakinan bahwa jika kita cukup pintar, cukup tekun, cukup analitis, kita bisa menemukan penjelasan yang akan membuat segalanya masuk akal. Ini lahir dari ketakutan: takut bahwa jika kita tidak mengerti, berarti tidak ada yang memegang kendali. Tapi ironisnya, ketakutan itu sendiri adalah bukti bahwa kita percaya ada sesuatu yang seharusnya pegang kendali — kita hanya belum mau menyerahkan haknya.`,
+      verse: `"Percayakanlah hidupmu kepada Tuhan dan berharaplah kepada-Nya; Ia akan bertindak."`,
+      ref: `Mazmur 37:5 — Percaya bukan berarti berhenti berpikir, tapi berhenti mencuri peran-Nya`
+    },
+    B: {
+      text: `Ada sebuah paradoks yang indah: <em>semakin dalam kita mengenal Sang Penenun, semakin kita nyaman dengan hal-hal yang tidak kita mengerti tentang-Nya.</em> Bukan karena kita bodoh atau pasif — tapi karena kepercayaan kita bukan dibangun di atas pemahaman kita, melainkan di atas karakter-Nya yang sudah terbukti. Elian tidak tahu mengapa Lira pergi. Tapi ia mulai tahu kepada siapa ia bisa mempercayai pertanyaan itu.`,
+      verse: `"Aku telah belajar mencukupkan diri dalam segala keadaan. Aku tahu bagaimana kekurangan dan bagaimana berkelimpahan."`,
+      ref: `Filipi 4:11-12 — Paulus menyebut ini "belajar" — bukan bawaan lahir, tapi proses`
+    }
+  };
+
+  let chosen = null;
+
+  function makeChoice(choice) {
+    if (chosen) return;
+    chosen = choice;
+
+    document.getElementById('btn' + choice).classList.add('selected');
+    document.getElementById('btn' + (choice === 'A' ? 'B' : 'A')).classList.add('dimmed');
+
+    const pctA = choice === 'A' ? 44 : 56;
+    const pctB = 100 - pctA;
+
+    const stat = document.getElementById('statArea');
+    stat.classList.add('visible');
+    setTimeout(() => {
+      document.getElementById('statBarA').style.width = pctA + '%';
+      document.getElementById('statBarB').style.width = pctB + '%';
+      document.getElementById('statNumA').textContent = pctA;
+      document.getElementById('statNumB').textContent = pctB;
+    }, 100);
+
+    const insight = document.getElementById('insightCard');
+    document.getElementById('insightText').innerHTML = insights[choice];
+    insight.classList.add('visible');
+
+    const ref = reflections[choice];
+    document.getElementById('reflectionText').innerHTML = ref.text;
+    document.getElementById('reflectionVerse').innerHTML = `<p>${ref.verse}</p><cite>${ref.ref}</cite>`;
+    setTimeout(() => document.getElementById('reflectionCard').classList.add('visible'), 400);
+    setTimeout(() => document.getElementById('finishSection').classList.add('visible'), 800);
+  }
+</script>
+</body>
+</html>
