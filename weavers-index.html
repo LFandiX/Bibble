@@ -257,6 +257,23 @@
     background: var(--dark-mid);
   }
 
+   .next-link {
+    display: inline-block;
+    padding: 1rem 3rem;
+    border: 1px solid rgba(168,74,74,0.4);
+    color: var(--accent-light);
+    text-decoration: none;
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem; letter-spacing: 0.3em;
+    text-transform: uppercase;
+    transition: all 0.4s;
+    background: rgba(124,45,45,0.08);
+  }
+
+  .next-link:hover {
+    background: rgba(124,45,45,0.2);
+    border-color: var(--accent);
+  }
   .module-card::before {
     content: '';
     position: absolute;
@@ -568,146 +585,8 @@
 
 <!-- MODULES -->
 <section class="modules-section">
-  <div class="modules-header reveal">
-    <span class="section-label">Perjalanan dalam Tiga Bagian</span>
-    <h2>Pilih Modul</h2>
-  </div>
-
-  <div class="modules-grid">
-
-    <!-- Modul 01 -->
-    <a class="module-card crimson reveal" href="modul-01.html">
-      <svg class="card-bg" viewBox="0 0 400 530" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <radialGradient id="c1" cx="50%" cy="60%" r="55%">
-            <stop offset="0%" stop-color="#3d1010"/>
-            <stop offset="100%" stop-color="#0d0808"/>
-          </radialGradient>
-        </defs>
-        <rect width="400" height="530" fill="url(#c1)"/>
-        <!-- Broken threads -->
-        <g stroke="#c87a7a" stroke-width="0.8" opacity="0.15">
-          <line x1="60" y1="0" x2="60" y2="210"/>
-          <line x1="100" y1="0" x2="100" y2="320"/>
-          <line x1="140" y1="0" x2="140" y2="530"/>
-          <line x1="180" y1="0" x2="180" y2="280"/>
-          <line x1="220" y1="0" x2="220" y2="530"/>
-          <line x1="260" y1="0" x2="260" y2="180"/>
-          <line x1="300" y1="0" x2="300" y2="530"/>
-          <line x1="340" y1="0" x2="340" y2="380"/>
-        </g>
-        <!-- Frayed ends -->
-        <g stroke="#c87a7a" stroke-width="0.6" opacity="0.3">
-          <line x1="60" y1="210" x2="56" y2="232"/>
-          <line x1="60" y1="210" x2="64" y2="228"/>
-          <line x1="100" y1="320" x2="96" y2="342"/>
-          <line x1="100" y1="320" x2="104" y2="338"/>
-          <line x1="180" y1="280" x2="176" y2="302"/>
-          <line x1="180" y1="280" x2="183" y2="298"/>
-          <line x1="260" y1="180" x2="256" y2="202"/>
-          <line x1="260" y1="180" x2="263" y2="198"/>
-          <line x1="340" y1="380" x2="336" y2="402"/>
-          <line x1="340" y1="380" x2="343" y2="398"/>
-        </g>
-        <!-- Gaping hole in the tapestry -->
-        <ellipse cx="200" cy="280" rx="80" ry="60" fill="#0d0808" opacity="0.6"/>
-        <ellipse cx="200" cy="280" rx="80" ry="60" fill="none" stroke="#7c2d2d" stroke-width="0.5" opacity="0.4"/>
-      </svg>
-      <div class="card-overlay"></div>
-      <div class="card-arrow">
-        <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-      </div>
-      <div class="card-content">
-        <span class="card-num">Modul 01</span>
-        <h3 class="card-title">Lubang di<br>Permadani</h3>
-        <p class="card-desc">Wabah merenggut Lira — dan Elian berdiri di depan ribuan benang yang putus. Pertanyaan yang tak tertahankan akhirnya keluar: mengapa Sang Penenun membiarkan ini terjadi?</p>
-        <p class="card-verse">Ayub 21:7 — "Mengapa orang fasik tetap hidup..."</p>
-      </div>
-    </a>
-
-    <!-- Modul 02 -->
-    <a class="module-card steel reveal" href="modul-02.html" style="transition-delay: 0.15s">
-      <svg class="card-bg" viewBox="0 0 400 530" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <radialGradient id="c2" cx="50%" cy="30%" r="55%">
-            <stop offset="0%" stop-color="#0f1e28"/>
-            <stop offset="100%" stop-color="#070c10"/>
-          </radialGradient>
-        </defs>
-        <rect width="400" height="530" fill="url(#c2)"/>
-        <!-- Magnifying glass geometric -->
-        <circle cx="200" cy="220" r="100" fill="none" stroke="#6a8fa8" stroke-width="0.6" opacity="0.15"/>
-        <circle cx="200" cy="220" r="85" fill="none" stroke="#6a8fa8" stroke-width="0.3" opacity="0.1"/>
-        <line x1="275" y1="295" x2="330" y2="380" stroke="#6a8fa8" stroke-width="1" opacity="0.15"/>
-        <!-- Infinite lines inside glass — the overwhelm -->
-        <g stroke="#8aafcc" stroke-width="0.4" opacity="0.12">
-          <line x1="120" y1="140" x2="280" y2="300"/>
-          <line x1="130" y1="130" x2="290" y2="310"/>
-          <line x1="200" y1="120" x2="200" y2="320"/>
-          <line x1="120" y1="220" x2="280" y2="220"/>
-          <line x1="150" y1="150" x2="250" y2="290"/>
-          <line x1="250" y1="150" x2="150" y2="290"/>
-        </g>
-        <!-- Stars / data points -->
-        <g fill="#8aafcc" opacity="0.2">
-          <circle cx="160" cy="180" r="1.5"/>
-          <circle cx="220" cy="160" r="1"/>
-          <circle cx="240" cy="200" r="1.5"/>
-          <circle cx="175" cy="245" r="1"/>
-          <circle cx="230" cy="255" r="1.5"/>
-          <circle cx="195" cy="190" r="2"/>
-        </g>
-      </svg>
-      <div class="card-overlay"></div>
-      <div class="card-arrow">
-        <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-      </div>
-      <div class="card-content">
-        <span class="card-num">Modul 02</span>
-        <h3 class="card-title">Cangkir dan<br>Samudera</h3>
-        <p class="card-desc">Elian mencuri Kaca Pembesar Agung — ia ingin menjadi omniscient. Tapi saat ia melihat segalanya sekaligus, jiwanya mulai retak di bawah beban pengetahuan tanpa batas itu.</p>
-        <p class="card-verse">Yesaya 55:8-9 — "Rancangan-Ku bukanlah rancanganmu..."</p>
-      </div>
-    </a>
-
-    <!-- Modul 03 -->
-    <a class="module-card violet reveal" href="modul-03.html" style="transition-delay: 0.3s">
-      <svg class="card-bg" viewBox="0 0 400 530" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <radialGradient id="c3" cx="50%" cy="55%" r="55%">
-            <stop offset="0%" stop-color="#1a1028"/>
-            <stop offset="100%" stop-color="#0a0810"/>
-          </radialGradient>
-        </defs>
-        <rect width="400" height="530" fill="url(#c3)"/>
-        <!-- Tapestry with black and gold threads intermingled -->
-        <g opacity="0.12">
-          <line x1="80" y1="0" x2="80" y2="530" stroke="#9370a8" stroke-width="0.8"/>
-          <line x1="120" y1="0" x2="120" y2="530" stroke="#1a1028" stroke-width="2"/>
-          <line x1="160" y1="0" x2="160" y2="530" stroke="#b89a5a" stroke-width="0.8"/>
-          <line x1="200" y1="0" x2="200" y2="530" stroke="#9370a8" stroke-width="0.8"/>
-          <line x1="240" y1="0" x2="240" y2="530" stroke="#1a1028" stroke-width="2"/>
-          <line x1="280" y1="0" x2="280" y2="530" stroke="#b89a5a" stroke-width="0.8"/>
-          <line x1="320" y1="0" x2="320" y2="530" stroke="#9370a8" stroke-width="0.8"/>
-        </g>
-        <!-- Wounded hands -->
-        <ellipse cx="200" cy="260" rx="30" ry="50" fill="none" stroke="#9370a8" stroke-width="0.5" opacity="0.15"/>
-        <line x1="185" y1="250" x2="215" y2="250" stroke="#c9943a" stroke-width="0.6" opacity="0.3"/>
-        <circle cx="200" cy="250" r="4" fill="#c9943a" opacity="0.2"/>
-      </svg>
-      <div class="card-overlay"></div>
-      <div class="card-arrow">
-        <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-      </div>
-      <div class="card-content">
-        <span class="card-num">Modul 03</span>
-        <h3 class="card-title">Mengapa Masih Ada<br>Benang Hitam?</h3>
-        <p class="card-desc">Sang Penenun menunjukkan tangan-Nya yang terluka. Permadani belum selesai — dan setiap benang, bahkan yang paling gelap, adalah bagian dari gambar yang belum dapat dilihat sepenuhnya.</p>
-        <p class="card-verse">Roma 8:28 — "Allah turut bekerja dalam segala sesuatu..."</p>
-      </div>
-    </a>
-
-  </div>
+   <a href="weavers-modul-01.html" class="next-link">Start Reading →</a>
+ 
 </section>
 
 <!-- BOTTOM QUOTE -->
